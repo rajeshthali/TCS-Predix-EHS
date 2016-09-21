@@ -3,6 +3,12 @@ package com.ge.predix.solsvc.machinedata.simulator.vo;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class AQIAttributesVO {
+	
+	@JsonProperty("floor")
+	private int floor;
+	
+	@JsonProperty("assetName")
+	private String assetName;
 
 	@JsonProperty("O3")
 	private Double O3;
@@ -92,11 +98,30 @@ public class AQIAttributesVO {
 		PM10 = pM10;
 	}
 
+	public int getFloor() {
+		return floor;
+	}
+
+	public void setFloor(int floor) {
+		this.floor = floor;
+	}
+
+	public String getAssetName() {
+		return assetName;
+	}
+
+	public void setAssetName(String assetName) {
+		this.assetName = assetName;
+	}
+
 	@Override
 	public String toString() {
-		return "AQIAttributesVO [O3=" + O3 + ", NH3=" + NH3 + ", NO2=" + NO2 + ", PB=" + PB + ", CO=" + CO + ", SO2="
-				+ SO2 + ", PM2_5=" + PM2_5 + ", PM10=" + PM10 + "]";
+		return "AQIAttributesVO [floor=" + floor + ", assetName=" + assetName
+				+ ", O3=" + O3 + ", NH3=" + NH3 + ", NO2=" + NO2 + ", PB=" + PB
+				+ ", CO=" + CO + ", SO2=" + SO2 + ", PM2_5=" + PM2_5
+				+ ", PM10=" + PM10 + "]";
 	}
+
 	
 	
 }

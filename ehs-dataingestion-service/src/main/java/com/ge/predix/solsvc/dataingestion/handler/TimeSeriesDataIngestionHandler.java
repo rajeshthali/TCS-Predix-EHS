@@ -107,14 +107,14 @@ public class TimeSeriesDataIngestionHandler extends BaseFactory {
 			log.info("TimeSeries URL : " + this.tsInjectionWSConfig.getInjectionUri());
 			log.info("WebSocket URL : " + this.wsConfig.getPredixWebSocketURI());
 			// Sipra
-			String machineValue = evn.getProperty("user.asset.machineValue");
+			/*String machineValue = evn.getProperty("user.asset.machineValue");
 			Map<String, AssetObject> assetObjectMap = this.assetMap
 					.get(machineValue);
 			if (assetObjectMap == null) {
 				assetObjectMap = assetDataHandler
 						.retriveAssetObjects(authorization);
 				this.assetMap.put(machineValue, assetObjectMap);
-			}
+			}*/
 			log.info("TimeSeries JSON : " + this.jsonMapper.toJson(dpIngestion));
 			if (dpIngestion.getBody() != null && dpIngestion.getBody().size() > 0) {
 				// commented by sipra

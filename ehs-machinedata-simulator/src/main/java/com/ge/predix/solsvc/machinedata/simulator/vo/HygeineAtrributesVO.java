@@ -3,7 +3,13 @@ package com.ge.predix.solsvc.machinedata.simulator.vo;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class HygeineAtrributesVO {
-
+	
+	@JsonProperty("floor")
+	private int floor;
+	
+	@JsonProperty("assetName")
+	private String assetName;
+	
 	@JsonProperty("temperature")
 	private Double temperature;
 	
@@ -35,6 +41,22 @@ public class HygeineAtrributesVO {
 
 	public void setHumidity(Double humidity) {
 		this.humidity = humidity;
+	}
+
+	public int getFloor() {
+		return floor;
+	}
+
+	public void setFloor(int floor) {
+		this.floor = floor;
+	}
+
+	public String getAssetName() {
+		return assetName;
+	}
+
+	public void setAssetName(String assetName) {
+		this.assetName = assetName;
 	}
 	
 	
