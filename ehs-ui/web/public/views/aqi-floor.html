@@ -12,8 +12,11 @@
 						<div id="aqi-area" class="tab-pane fade in active aqi-tab-base-content">
 							<img alt="" class="loading_image" ng-show="aqiAreaLoading" src="images/25.gif">
 							<ul class="nav nav-tabs" id="aqi-area-tab">
+								<li ng-repeat="area in aqiAreaData" ng-class="{'active':$index==0}"><a data-toggle="tab" href="#" data-target="#aqi_area_{{$index}}">{{area.assetName}}</a></li>
 							</ul>
-							<div id="aqi-area-tab-content" class="tab-content aqi-tab-base-content-inner" style="display: none;"></div>
+							<div id="aqi-area-tab-content" class="tab-content aqi-tab-base-content-inner" style="display: none;">
+								<div ng-repeat="area in aqiAreaData" id="aqi_area_{{$index}}" ng-class="{'active':$index==0}" class="tab-pane fade in">{{area.assetName}}</div>
+							</div>
 						</div>
 						<div id="aqi-comparison" class="tab-pane fade ">
 							<img alt="" class="loading_image" ng-show="aqiAreaComparisonLoading" src="images/25.gif">
@@ -31,8 +34,11 @@
 					<div class="tab-content  aqi-tab-base-inner">
 						<div id="aqi-machine" class="tab-pane fade in active aqi-tab-base-content">
 							<ul class="nav nav-tabs" id="aqi-machine-tab">
+								<li ng-repeat="machine in aqiMachineData" ng-class="{'active':$index==0}"><a data-toggle="tab" href="#" data-target="#aqi_machine_{{$index}}">{{machine.assetName}}</a></li>
 							</ul>
-							<div id="aqi-machine-tab-content" class="tab-content aqi-tab-base-content-inner" style="display: none;"></div>
+							<div id="aqi-machine-tab-content" class="tab-content aqi-tab-base-content-inner" style="display: none;">
+								<div ng-repeat="machine in aqiMachineData" id="aqi_machine_{{$index}}" ng-class="{'active':$index==0}" class="tab-pane fade in">{{machine.assetName}}</div>
+							</div>
 						</div>
 					</div>
 				</div>

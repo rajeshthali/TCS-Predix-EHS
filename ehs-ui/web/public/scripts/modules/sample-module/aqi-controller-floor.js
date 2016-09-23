@@ -6,6 +6,8 @@ define([ 'angular', './sample-module' ], function(angular, controllers) {
 				$scope.aqiAreaLoading = true;
 				$scope.aqiAreaComparisonLoading = true;
 				$scope.aqiMachineLoading = true;
+				$scope.aqiAreaData = [];
+				$scope.aqiMachineData = [];
 				var interval = 30 * 1000;
 				if (!$rootScope.floor) {
 					$rootScope.floor = 0;
@@ -21,19 +23,9 @@ define([ 'angular', './sample-module' ], function(angular, controllers) {
 				loadData();
 				var loadAqiMachine = function(floor) {
 					$scope.aqiMachineLoading = true;
-					var machineTab = $("#aqi-machine-tab");
-					var machineTabContent = $("#aqi-machine-tab-content");
 					DashBoardService.getAqiMachineValues(floor, interval, function(res) {
-						for (var i = 0; i < res.length; i++) {
-							for (var j = 0; j < res[i].assets.length; j++) {
-								if (j == 0) {
-									machineTab.append('<li class="active"><a data-toggle="tab" href="#" data-target="#aqi_machine_' + j + '">' + res[i].assets[j].assetName + '</a></li>');
-									machineTabContent.append('<div id="aqi_machine_' + j + '" class="tab-pane fade in active">' + res[i].assets[j].assetName + '</div>');
-								} else {
-									machineTab.append('<li ><a data-toggle="tab" href="#" data-target="#aqi_machine_' + j + '">' + res[i].assets[j].assetName + '</a></li>');
-									machineTabContent.append('<div id="aqi_machine_' + j + '" class="tab-pane fade in">' + res[i].assets[j].assetName + '</div>');
-								}
-							}
+						if (res.length > 0) {
+							$scope.aqiMachineData = res[0].assets;
 						}
 						$("#aqi-machine-tab-content").fadeIn();
 						$scope.aqiMachineLoading = false;
@@ -43,21 +35,11 @@ define([ 'angular', './sample-module' ], function(angular, controllers) {
 				var loadAqiArea = function(floor) {
 					$scope.aqiAreaLoading = true;
 					$scope.aqiAreaComparisonLoading = true;
-					var areaTab = $("#aqi-area-tab");
-					var areaTabContent = $("#aqi-area-tab-content");
 					DashBoardService.getAqiAreaValues(floor, interval, function(res) {
-						for (var i = 0; i < res.length; i++) {
-							for (var j = 0; j < res[i].assets.length; j++) {
-								if (j == 0) {
-									areaTab.append('<li class="active"><a data-toggle="tab" href="#" data-target="#aqi_area_' + j + '">' + res[i].assets[j].assetName + '</a></li>');
-									areaTabContent.append('<div id="aqi_area_' + j + '" class="tab-pane fade in active">' + res[i].assets[j].assetName + '</div>');
-								} else {
-									areaTab.append('<li ><a data-toggle="tab" href="#" data-target="#aqi_area_' + j + '">' + res[i].assets[j].assetName + '</a></li>');
-									areaTabContent.append('<div id="aqi_area_' + j + '" class="tab-pane fade in">' + res[i].assets[j].assetName + '</div>');
-								}
-
-							}
+						if (res.length > 0) {
+							$scope.aqiAreaData = res[0].assets;
 						}
+
 						$scope.aqiAreaLoading = false;
 						$scope.aqiAreaComparisonLoading = false;
 						$("#aqi-area-tab-content").fadeIn();
