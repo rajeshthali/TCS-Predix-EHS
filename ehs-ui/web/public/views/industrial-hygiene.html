@@ -1,0 +1,109 @@
+
+<style>
+main{
+background-color: #ffffff;
+}
+
+</style>
+<div class="loaderpg"></div>
+<img src='/images/25.gif' class="lad_img">
+<div >
+	<div class="col-md-3 hygn_background">
+		<div class="hygn_rect_curve_1">
+
+			<!-- <img src="/images/icon_industrial_hygiene.png" class="hygn_icons_1"
+				style="border: 1px solid white;"> -->
+			<div class="hygn_icons_1"></div>
+			<h4 class="title_hygn">Industrial Hygiene</h4>
+
+		</div>
+		<div class="hygn_area_tab">
+			<h6 class="box_text_hygn">SMT Line1</h6>
+		</div>
+		<div class="hygn_area_tab">
+			<h6 class="box_text_hygn">SMT Line2</h6>
+		</div>
+		<div class="hygn_area_tab">
+			<h6 class="box_text_hygn">Production Ground Floor</h6>
+		</div>
+
+	</div>
+	<div class="col-md-3 hygn_background">
+		<div class="hygn_rect_curve_2">
+			<!-- <img src="/images/icon_air_quality.png" class="hygn_icons_2"
+				style="border: 1px solid white;"> -->
+				<div class="hygn_icons_2"></div>
+			<h4 class="title_hygn">Humidity</h4>
+		</div>
+		<div class="hygn_data_tab" ng-click="gotoDetailsView()">
+			<p class="top">
+				<span class="data_text">{{smt_1_value.humidity}}%</span>
+			</p>
+		</div>
+		<div class="hygn_data_tab" ng-click="gotoDetailsView()">
+			<p class="top">
+				<span class="data_text">{{smt_2_value.humidity}}%</span>
+			</p>
+		</div>
+		<div class="hygn_data_tab" ng-click="gotoDetailsView()">
+			<p class="top">
+				<span class="data_text">{{pgf_value.humidity}}%</span>
+			</p>
+		</div>
+	</div>
+
+
+	<div class="col-md-3 hygn_background">
+		<div class="hygn_rect_curve_3">
+			<!-- <img src="/images/icon_noise.png" class="hygn_icons_3"
+				style="border: 1px solid white;"> -->
+				<div class="hygn_icons_3"></div>
+			<h4 class="title_hygn">Noise</h4>
+		</div>
+		<div class="hygn_data_tab" ng-click="gotoDetailsView()">
+			<p class="top">
+				<span class="data_text">{{smt_1_value.noise}}db</span>
+			</p>
+
+		</div>
+		<div class="hygn_data_tab" ng-click="gotoDetailsView()">
+			<p class="top">
+				<span class="data_text">{{smt_2_value.noise}}db</span>
+			</p>
+		</div>
+		<div class="hygn_data_tab" ng-click="gotoDetailsView()">
+			<p class="top">
+				<span class="data_text">{{pgf_value.noise}}db</span>
+			</p>
+		</div>
+
+	</div>
+	<div class="col-md-3 hygn_background">
+		<div class="hygn_rect_curve_4">
+			<!-- <img src="/images/icon_temperature.png" class="hygn_icons_4"
+				style="border: 1px solid white;"> -->
+			<div class="hygn_icons_4"></div>
+			<h4 class="title_hygn">Temperature</h4>
+		</div>
+		<div class="hygn_data_tab" ng-click="gotoDetailsView()">
+			<p class="top">
+				<span class="data_text">{{smt_1_value.temperature}}%<sup>0</sup>C
+				</span>
+			</p>
+		</div>
+		<div class="hygn_data_tab" ng-click="gotoDetailsView()">
+			<p class="top">
+				<span class="data_text">{{smt_2_value.temperature}}%<sup>0</sup>C
+				</span>
+			</p>
+		</div>
+		<div class="hygn_data_tab" ng-click="gotoDetailsView()">
+			<p class="top">
+				<span class="data_text">{{pgf_value.temperature}}%<sup>0</sup>C
+				</span>
+			</p>
+		</div>
+	</div>
+</div>
+
+
