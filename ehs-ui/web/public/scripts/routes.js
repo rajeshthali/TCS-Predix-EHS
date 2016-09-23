@@ -20,7 +20,7 @@ define([ 'angular', 'angular-ui-router' ], function(angular) {
 				authenticated : [ '$q', 'PredixUserService', function($q, predixUserService) {
 					var deferred = $q.defer();
 					predixUserService.isAuthenticated().then(function(userInfo) {
-						//console.log(userInfo);
+						// console.log(userInfo);
 						deferred.resolve(userInfo);
 					}, function() {
 						deferred.reject({
@@ -35,8 +35,8 @@ define([ 'angular', 'angular-ui-router' ], function(angular) {
 			url : '/dashboards',
 			templateUrl : 'views/dashboards-floor.html',
 			controller : 'DashboardsCtrlFloor',
-//			templateUrl : 'views/dashboards.html',
-//			controller : 'DashboardsCtrl',
+		// templateUrl : 'views/dashboards.html',
+		// controller : 'DashboardsCtrl',
 		})
 
 		.state('asset_detail', {
@@ -48,9 +48,11 @@ define([ 'angular', 'angular-ui-router' ], function(angular) {
 			templateUrl : 'views/garph_demo.html',
 			controller : 'GraphCtrl'
 		}).state('airquality', {
+			// url : '/airquality',
+			// templateUrl : 'views/airquality.html',
 			url : '/airquality',
-			templateUrl : 'views/airquality.html',
-			controller : 'airqmainCtrl',
+			templateUrl : 'views/aqi-floor.html',
+			controller : 'AqiController',
 			params : {
 				'smtare' : null
 			}

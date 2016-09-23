@@ -17,7 +17,7 @@ define([ 'angular', './sample-module' ], function(angular, controllers) {
 				var floorArray = [];
 				var maxFloor = 3;
 				var maxOpacity = .99;
-				var interval = 60 * 1000;// 1 min
+				var interval = 25 * 1000;
 				var isMachineCompleated = false;
 				var isAreaCompleated = false;
 				var compliant = 'all';
@@ -109,7 +109,7 @@ define([ 'angular', './sample-module' ], function(angular, controllers) {
 					} else {
 						item = $('#floor_' + i + '> .icon');
 					}
-					
+
 					switch (compliant) {
 					case 'all':
 						$('.non-complaint').show();
@@ -124,7 +124,7 @@ define([ 'angular', './sample-module' ], function(angular, controllers) {
 						$('.complaint').hide();
 						break;
 					}
-					
+
 					item.each(function(node) {
 						var thisObject = this;
 						var data = $(this).css('top');
@@ -154,6 +154,7 @@ define([ 'angular', './sample-module' ], function(angular, controllers) {
 					$scope.floor = floor;
 					$scope.animateFloor(floor);
 					$scope.isAllFloorVisible = false;
+					$rootScope.floor = $scope.floor;
 				};
 				$scope.showAllFloorToggle = function() {
 					if ($scope.isAllFloorVisible) {
@@ -181,7 +182,9 @@ define([ 'angular', './sample-module' ], function(angular, controllers) {
 					}
 					$scope.selectFoor($scope.floor);
 				};
-				$scope.selectFoor(0);
+				if (!$rootScope.floor)
+					$rootScope.floor = 0
+				$scope.selectFoor($rootScope.floor);
 
 				var addTag = function(floorIndex, tag, top, left, data, iconClass) {
 					// console.log(data);
@@ -242,7 +245,7 @@ define([ 'angular', './sample-module' ], function(angular, controllers) {
 								+ '<div class="popup_content"> Temperature : <b>' + avgHygiene.temperature + ' &#8451;</b></div>';
 					}
 
-					var html = '<div class="icon ' + iconClass + ' '+type+'" style="top: ' + top + '%; left: ' + left + '%; background: url(\'../images/' + image + '\');">' + '<div style="line-height: 20px;"  class="popup popup-dropdown-content ' + tag + '" >' + innerHtml + '</div></div>';
+					var html = '<div class="icon ' + iconClass + ' ' + type + '" style="top: ' + top + '%; left: ' + left + '%; background: url(\'../images/' + image + '\');">' + '<div style="line-height: 20px;"  class="popup popup-dropdown-content ' + tag + '" >' + innerHtml + '</div></div>';
 					floor.append(html);
 				};
 

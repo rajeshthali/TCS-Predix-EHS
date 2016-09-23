@@ -1,0 +1,42 @@
+<div class="col-md-12" style="padding: 10px;">
+	<div class="col-md-12">
+		<div class="row">
+			<div class="col-md-6" style="padding-left: 5px; padding-right: 5px;">
+				<div class="col-md-12  aqi-tab-base">
+					<ul class="nav nav-tabs">
+						<li class="active"><a data-toggle="tab" href="" data-target="#aqi-area">Indoor Air Quality</a></li>
+						<li><a data-toggle="tab" href="" data-target="#aqi-comparison">AQI Comparison</a></li>
+					</ul>
+
+					<div class="tab-content aqi-tab-base-inner">
+						<div id="aqi-area" class="tab-pane fade in active aqi-tab-base-content">
+							<img alt="" class="loading_image" ng-show="aqiAreaLoading" src="images/25.gif">
+							<ul class="nav nav-tabs" id="aqi-area-tab">
+							</ul>
+							<div id="aqi-area-tab-content" class="tab-content aqi-tab-base-content-inner" style="display: none;"></div>
+						</div>
+						<div id="aqi-comparison" class="tab-pane fade ">
+							<img alt="" class="loading_image" ng-show="aqiAreaComparisonLoading" src="images/25.gif">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6" style="padding-left: 5px; padding-right: 5px;">
+				<div class="col-md-12 aqi-tab-base">
+					<img alt="" class="loading_image" ng-show="aqiMachineLoading" src="images/25.gif">
+					<ul class="nav nav-tabs">
+						<li class="active"><a data-toggle="tab" href="" data-target="#p-s-e">Process Stack Emission</a></li>
+					</ul>
+
+					<div class="tab-content  aqi-tab-base-inner">
+						<div id="aqi-machine" class="tab-pane fade in active aqi-tab-base-content">
+							<ul class="nav nav-tabs" id="aqi-machine-tab">
+							</ul>
+							<div id="aqi-machine-tab-content" class="tab-content aqi-tab-base-content-inner" style="display: none;"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
