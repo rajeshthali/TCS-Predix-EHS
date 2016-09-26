@@ -2,19 +2,49 @@ define([ 'angular', './sample-module', ], function(angular, controllers) {
 	'use strict';
 	controllers.controller('AqiController', [ '$scope', '$http', '$state', '$log', 'PredixAssetService', 'PredixViewService', 'CalculationOneService', 'CalculationService', '$interval', 'AqiService', '$rootScope', 'AuthService', 'HygieneService', 'DashBoardService',
 			function($scope, $http, $state, $log, PredixAssetService, PredixViewService, CalculationOneService, CalculationService, $interval, AqiService, $rootScope, AuthService, HygieneService, DashBoardService) {
-
+				$scope.maxValue = 50;
 				$scope.aqiAreaLoading = true;
 				$scope.aqiAreaComparisonLoading = true;
 				$scope.aqiMachineLoading = true;
-				$scope.aqiAreaData = [];
-				$scope.aqiMachineData = [];
+				$scope.aqiAreaData = null;
+				$scope.aqiMachineData = null;
+				$scope.tabIndexArea = 0;
+				$scope.tabIndexMachine = 0;
 				var areaCharts = [];
 				var areaGaugeCharts = [];
 
-				var interval = 40 * 1000;
+				var interval = 50 * 1000;
+				var refreshInterval = 20* 1000;
+				var intervalPromiseMachine = null;
+				var intervalPromiseArea = null;
+
 				if (!$rootScope.floor) {
 					$rootScope.floor = 0;
 				}
+				var dynamicUpdateMachineStarted = false;
+				var dynamicUpdateAreaStarted = false;
+				var startDynamicUpdateMachine = function() {
+					intervalPromiseMachine = $interval(function() {
+						loadAqiMachine($rootScope.floor);
+					}, 12000);
+				};
+
+				var startDynamicUpdateArea = function() {
+					// console.log('intervalPromiseArea>>');
+					intervalPromiseArea = $interval(function() {
+						// console.log('intervalPromiseArea');
+						loadAqiArea($rootScope.floor);
+					}, 12000);
+				};
+
+				$scope.$on('$destroy', function() {
+					$scope.stop();
+				});
+
+				$scope.stop = function() {
+					$interval.cancel(intervalPromiseMachine);
+					$interval.cancel(intervalPromiseArea);
+				};
 
 				// console.log($rootScope.floor);
 				var loadData = function() {
@@ -25,19 +55,35 @@ define([ 'angular', './sample-module', ], function(angular, controllers) {
 				};
 				loadData();
 				var loadAqiMachine = function(floor) {
-					$scope.aqiMachineLoading = true;
-					DashBoardService.getAqiMachineValues(floor, interval, function(res) {
-						if (res.length > 0) {
-							$scope.aqiMachineData = res[0].assets;
-						}
-						$("#aqi-machine-tab-content").fadeIn();
-						$scope.aqiMachineLoading = false;
-						$scope.selectTab(0, 'machine');
-						// console.log($scope.aqiMachineData);
-					});
+					// console.log(!$scope.aqiMachineData);
+					// console.log($scope.tabIndexMachine);
+					if (!$scope.aqiMachineData) {
+						$scope.aqiMachineLoading = true;
+						DashBoardService.getAqiMachineValues(floor, interval, function(res) {
+							if (res.length > 0) {
+								$scope.aqiMachineData = res[0].assets;
+								$("#aqi-machine-tab-content").fadeIn();
+								$scope.selectTab($scope.tabIndexMachine, 'machine');
+								if (!dynamicUpdateMachineStarted) {
+									startDynamicUpdateMachine();
+									dynamicUpdateMachineStarted = true;
+								}
+							}
+							$scope.aqiMachineLoading = false;
+						});
+					} else {
+						DashBoardService.getAqiMachineValues(floor, interval, function(res) {
+							if (res.length > 0) {
+								$scope.aqiMachineData = res[0].assets;
+								// console.log($scope.tabIndexMachine);
+								$scope.selectTab($scope.tabIndexMachine, 'machine');
+							}
+						});
+					}
+
 				};
 				var getMahineComponets = function(data) {
-					console.log(data);
+					// console.log(data);
 					var components = {};
 					for (var i = 0; i < data.length; i++) {
 						components[data[i].name] = 0.0;
@@ -53,21 +99,42 @@ define([ 'angular', './sample-module', ], function(angular, controllers) {
 				};
 
 				var loadAqiArea = function(floor) {
-					$scope.aqiAreaLoading = true;
-					$scope.aqiAreaComparisonLoading = true;
-					DashBoardService.getAqiAreaValues(floor, interval, function(res) {
-						if (res.length > 0) {
-							$scope.aqiAreaData = res[0].assets;
-						}
-						$scope.aqiAreaLoading = false;
-						$scope.aqiAreaComparisonLoading = false;
-						$("#aqi-area-tab-content").fadeIn();
+					if (!$scope.aqiAreaData) {
+						$scope.aqiAreaLoading = true;
+						$scope.aqiAreaComparisonLoading = true;
+						DashBoardService.getAqiAreaValues(floor, interval, function(res) {
+							if (res.length > 0) {
+								$scope.aqiAreaData = res[0].assets;
+								$("#aqi-area-tab-content").fadeIn();
+								$scope.selectTab($scope.tabIndexArea, 'area');
+								if (!dynamicUpdateAreaStarted) {
+									startDynamicUpdateArea();
+									dynamicUpdateAreaStarted = true;
+								}
+							}
+							$scope.aqiAreaLoading = false;
+							$scope.aqiAreaComparisonLoading = false;
+						});
+					} else {
+						DashBoardService.getAqiAreaValues(floor, interval, function(res) {
+							if (res.length > 0) {
+								// console.log(res[0]);
+								var last = res[0].assets[$scope.tabIndexArea].data.value.length - 1;
+								last = 0;
+								var x = res[0].assets[$scope.tabIndexArea].data.timestamps[last];
+								var y = res[0].assets[$scope.tabIndexArea].data.value[last];
 
-						$scope.selectTab(0, 'area');
-					});
+								var timestamps = DashBoardService.prettyMs([ x ])[0];
+								areaCharts[$scope.tabIndexArea].series[0].addPoint([ timestamps, y ], true, true);
+							}
+						});
+					}
+
 				};
+
 				$scope.selectTab = function(index, type) {
 					if (type === 'area') {
+						$scope.tabIndexArea = index;
 						$scope.aqiAreaData[index].data.status = getStatus($scope.aqiAreaData[index].data.maxAqi.name, $scope.aqiAreaData[index].data.maxAqi.aqiValue);
 						$('.graph_class').hide();
 						$('.area_gauge_chart_base').hide();
@@ -79,6 +146,7 @@ define([ 'angular', './sample-module', ], function(angular, controllers) {
 
 						}, 300);
 					} else if (type === 'machine') {
+						$scope.tabIndexMachine = index;
 						// Hard coded Image Urls
 
 						// images/machine.jpg
@@ -104,7 +172,9 @@ define([ 'angular', './sample-module', ], function(angular, controllers) {
 						}
 						$scope.aqiMachineData[index].data.components = getMahineComponets($scope.aqiMachineData[index].data.seperatedResult);
 						$scope.aqiMachineData[index].data.status = getStatus($scope.aqiMachineData[index].data.maxAqi.name, $scope.aqiMachineData[index].data.maxAqi.aqiValue);
-						console.log($scope.aqiMachineData[index].data);
+						// console.log($scope.aqiMachineData[index].data);
+
+						console.log(">> " + $scope.tabIndexMachine);
 					}
 
 				};
@@ -115,11 +185,8 @@ define([ 'angular', './sample-module', ], function(angular, controllers) {
 				};
 
 				var loadValuesToGraph = function(id, dataX, dataY) {
-					// console.log(dataX);
-					// console.log(dataY);
-
 					$(id).each(function() {
-
+						// console.log('each');
 						var chart = new Highcharts.Chart({
 							type : 'spline',
 							animation : Highcharts.svg,
@@ -182,7 +249,7 @@ define([ 'angular', './sample-module', ], function(angular, controllers) {
 								lineWidth : 1,
 								marker : {
 									enabled : false,
-								},
+								}
 
 							} ]
 						});

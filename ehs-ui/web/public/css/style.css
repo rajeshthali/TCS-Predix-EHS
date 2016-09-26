@@ -1387,13 +1387,7 @@ px-app-nav.navbar--collapsed .login {
 .aqi_status {
 	color: #8BBE3D;
 	margin-top: 0px;
-	font-size: 43px;
-}
-
-.aqi_status {
-	color: #8BBE3D;
-	margin-top: 0px;
-	font-size: 43px;
+	font-size: 30px;
 }
 
 .machine_down_green {

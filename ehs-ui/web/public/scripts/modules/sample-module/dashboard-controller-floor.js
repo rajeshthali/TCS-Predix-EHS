@@ -32,7 +32,6 @@ define([ 'angular', './sample-module' ], function(angular, controllers) {
 						loadHygiene(i);
 					}
 				});
-
 				var loadAqiMachine = function(floor) {
 					DashBoardService.getAqiMachineValues(floor, interval, function(res) {
 						for (var i = 0; i < res.length; i++) {
