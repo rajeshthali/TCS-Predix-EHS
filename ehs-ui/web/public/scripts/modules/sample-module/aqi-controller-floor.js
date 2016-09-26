@@ -11,18 +11,7 @@ define([ 'angular', './sample-module', ], function(angular, controllers) {
 				var areaCharts = [];
 				var areaGaugeCharts = [];
 
-				$scope.areaChartConfig = {
-					options : {
-						chart : {
-							type : 'bar'
-						}
-					},
-					series : [ {
-						data : [ 10, 15 ]
-					} ],
-				};
-
-				var interval = 90 * 1000;
+				var interval = 40 * 1000;
 				if (!$rootScope.floor) {
 					$rootScope.floor = 0;
 				}
@@ -40,11 +29,27 @@ define([ 'angular', './sample-module', ], function(angular, controllers) {
 					DashBoardService.getAqiMachineValues(floor, interval, function(res) {
 						if (res.length > 0) {
 							$scope.aqiMachineData = res[0].assets;
-							console.log($scope.aqiMachineData);
 						}
 						$("#aqi-machine-tab-content").fadeIn();
 						$scope.aqiMachineLoading = false;
+						$scope.selectTab(0, 'machine');
+						// console.log($scope.aqiMachineData);
 					});
+				};
+				var getMahineComponets = function(data) {
+					console.log(data);
+					var components = {};
+					for (var i = 0; i < data.length; i++) {
+						components[data[i].name] = 0.0;
+						for (var j = 0; j < data[i].values.length; j++) {
+							// console.log(components[data[i].name] + ' ' +
+							// data[i].values[j]);
+							if (components[data[i].name] < data[i].values[j]) {
+								components[data[i].name] = data[i].values[j];
+							}
+						}
+					}
+					return components;
 				};
 
 				var loadAqiArea = function(floor) {
@@ -58,21 +63,50 @@ define([ 'angular', './sample-module', ], function(angular, controllers) {
 						$scope.aqiAreaComparisonLoading = false;
 						$("#aqi-area-tab-content").fadeIn();
 
-						$scope.areaTabSlect(0);
+						$scope.selectTab(0, 'area');
 					});
 				};
-				$scope.areaTabSlect = function(index) {
+				$scope.selectTab = function(index, type) {
+					if (type === 'area') {
+						$scope.aqiAreaData[index].data.status = getStatus($scope.aqiAreaData[index].data.maxAqi.name, $scope.aqiAreaData[index].data.maxAqi.aqiValue);
+						$('.graph_class').hide();
+						$('.area_gauge_chart_base').hide();
+						setTimeout(function() {
+							$('.graph_class').fadeIn();
+							loadValuesToGraph('#area_chart_' + index, DashBoardService.prettyMs($scope.aqiAreaData[index].data.timestamps), $scope.aqiAreaData[index].data.value);
+							loadGaugeChart('#area_gauge_chart_' + index, $scope.aqiAreaData[index].data.maxAqi.aqiValue);
+							$('.area_gauge_chart_base').fadeIn();
 
-					$scope.aqiAreaData[index].data.status = getStatus($scope.aqiAreaData[index].data.maxAqi.name, $scope.aqiAreaData[index].data.maxAqi.aqiValue);
-					$('.graph_class').hide();
-					$('.area_gauge_chart_base').hide();
-					setTimeout(function() {
-						$('.graph_class').fadeIn();
-						loadValuesToGraph('#area_chart_' + index, DashBoardService.prettyMs($scope.aqiAreaData[index].data.timestamps), $scope.aqiAreaData[index].data.value);
-						loadGaugeChart('#area_gauge_chart_' + index, $scope.aqiAreaData[index].data.maxAqi.aqiValue);
-						$('.area_gauge_chart_base').fadeIn();
+						}, 300);
+					} else if (type === 'machine') {
+						// Hard coded Image Urls
 
-					}, 300);
+						// images/machine.jpg
+						// images/wave_soldering_machine.png
+						// images/soltech_machine (1).png
+						// images/reflow_oven.png
+						switch ($scope.aqiMachineData[index].assetName) {
+						case 'Soltech-Machine':
+							$scope.aqiMachineData[index].data.imageUrl = 'images/soltech_machine (1).png';
+							break;
+						case 'Reflow-Ovan':
+							$scope.aqiMachineData[index].data.imageUrl = 'images/reflow_oven.png';
+							break;
+						case 'Wave-Soldering-Machine':
+							$scope.aqiMachineData[index].data.imageUrl = 'images/wave_soldering_machine.png';
+							break;
+						case 'Heller-Machine':
+							$scope.aqiMachineData[index].data.imageUrl = 'images/machine.jpg';
+							break;
+
+						default:
+							break;
+						}
+						$scope.aqiMachineData[index].data.components = getMahineComponets($scope.aqiMachineData[index].data.seperatedResult);
+						$scope.aqiMachineData[index].data.status = getStatus($scope.aqiMachineData[index].data.maxAqi.name, $scope.aqiMachineData[index].data.maxAqi.aqiValue);
+						console.log($scope.aqiMachineData[index].data);
+					}
+
 				};
 				var graphColor = '#00acec';
 

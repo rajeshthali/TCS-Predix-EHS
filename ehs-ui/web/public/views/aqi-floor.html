@@ -12,7 +12,7 @@
 						<div id="aqi-area" class="tab-pane fade in active aqi-tab-base-content">
 							<img alt="" class="loading_image" ng-show="aqiAreaLoading" src="images/25.gif">
 							<ul class="nav nav-tabs" id="aqi-area-tab">
-								<li ng-repeat="area in aqiAreaData" ng-class="{'active':$index==0}"><a data-toggle="tab" href="#" data-target="#aqi_area_{{$index}}" ng-click="areaTabSlect($index)">{{area.assetName}}</a></li>
+								<li ng-repeat="area in aqiAreaData" ng-class="{'active':$index==0}"><a data-toggle="tab" href="#" data-target="#aqi_area_{{$index}}" ng-click="selectTab($index,'area')">{{area.assetName}}</a></li>
 							</ul>
 							<div id="aqi-area-tab-content" class="tab-content aqi-tab-base-content-inner" style="display: none;">
 								<div ng-repeat="area in aqiAreaData" id="aqi_area_{{$index}}" ng-class="{'active':$index==0}" class="tab-pane fade in">
@@ -54,10 +54,58 @@
 					<div class="tab-content  aqi-tab-base-inner">
 						<div id="aqi-machine" class="tab-pane fade in active aqi-tab-base-content">
 							<ul class="nav nav-tabs" id="aqi-machine-tab">
-								<li ng-repeat="machine in aqiMachineData" ng-class="{'active':$index==0}"><a data-toggle="tab" href="#" data-target="#aqi_machine_{{$index}}">{{machine.assetName}}</a></li>
+								<li ng-repeat="machine in aqiMachineData" ng-class="{'active':$index==0}"><a data-toggle="tab" href="#" data-target="#aqi_machine_{{$index}}" ng-click="selectTab($index,'machine')">{{machine.assetName}}</a></li>
 							</ul>
 							<div id="aqi-machine-tab-content" class="tab-content aqi-tab-base-content-inner" style="display: none;">
-								<div ng-repeat="machine in aqiMachineData" id="aqi_machine_{{$index}}" ng-class="{'active':$index==0}" class="tab-pane fade in">{{machine.assetName}}</div>
+								<div ng-repeat="machine in aqiMachineData" id="aqi_machine_{{$index}}" ng-class="{'active':$index==0}" class="tab-pane fade in">
+
+
+									<div class="row">
+										<div class="col-md-12">
+											<div class="col-md-6">
+												<div class="col-md-12 machine_data" ng-class="{'machine_down_green': machine.data.components.SO2 < 80, 'machine_up_orange':machine.data.components.SO2 > 80}">
+													<h4 class="h">SO2</h4>
+													<h2 class="d">{{machine.data.components.SO2}}</h2>
+													<h3 class="s">ppb</h3>
+													<div ng-class="{'mahine_up_arrow': machine.data.components.SO2 < 80, 'mahine_down_arrow': machine.data.components.SO2 > 80}">
+														<i class="fa fa-arrow-up"></i>
+													</div>
+												</div>
+											</div>
+											<div class="col-md-6">
+												<div class="col-md-12 machine_data " ng-class="{'machine_down_green': machine.data.components.NO2 < 80, 'machine_up_orange':machine.data.components.NO2 > 80}">
+													<h4 class="h">NO2</h4>
+													<h2 class="d">{{machine.data.components.NO2}}</h2>
+													<h3 class="s">ppb</h3>
+													<div ng-class="{'mahine_up_arrow': machine.data.components.SO2 < 80, 'mahine_down_arrow': machine.data.components.SO2 > 80}">
+														<i class="fa fa-arrow-up"></i>
+													</div>
+												</div>
+											</div>
+											<div class="col-md-6">
+												<div class="col-md-12 machine_data " ng-class="{'machine_down_green': machine.data.components.PM2_5 < 80, 'machine_up_orange':machine.data.components.PM2_5 > 80}">
+													<h4 class="h">PM 2.5</h4>
+													<h2 class="d">{{machine.data.components.PM2_5}}</h2>
+													<h3 class="s">ug/m3</h3>
+													<div ng-class="{'mahine_up_arrow': machine.data.components.SO2 < 80, 'mahine_down_arrow': machine.data.components.SO2 > 80}">
+														<i class="fa fa-arrow-up"></i>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="row" style="margin-top: 50px;">
+										<div class="col-md-5 col-xs-12" style="height: 242px;">
+											<img alt="" class="center_img" ng-src="{{machine.data.imageUrl}}">
+										</div>
+										<div class="col-md-6 col-xs-12">
+											<h4 class="status_txt">Status</h4>
+											<h1 style="font-size: 43px;" ng-class="{'warn_sta': machine.data.maxAqi.aqiValue>=80 , 'stis_sta': machine.data.maxAqi.aqiValue<80}">{{machine.data.status}}</h1>
+										</div>
+									</div>
+
+								</div>
 							</div>
 						</div>
 					</div>

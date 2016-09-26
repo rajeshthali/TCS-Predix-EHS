@@ -219,14 +219,12 @@ px-app-nav.navbar--collapsed .login {
 .stis_sta {
 	color: #8BBE3D;
 	margin-top: 0px;
-	font-weight: 600;
 	font-size: 23px;
 }
 
 .warn_sta {
 	color: #FF9000;
 	margin-top: 0px;
-	font-weight: 600;
 }
 
 .prami_txt {
@@ -1029,14 +1027,6 @@ px-app-nav.navbar--collapsed .login {
 	margin-right: 5px;
 }
 
-.fa-arrow-up {
-	font-size: 27px !important;
-	position: absolute;
-	top: 36px;
-	right: 30px;
-	color: #fff;
-}
-
 .mach_val {
 	color: #fff;
 	padding-left: 3px;
@@ -1338,6 +1328,20 @@ px-app-nav.navbar--collapsed .login {
 	margin: auto;
 }
 
+.center_img {
+	max-height: 100%;
+	max-width: 100%;
+	width: auto;
+	height: auto !important;
+	position: absolute;
+	background-position: center;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin: auto;
+}
+
 #floor_0 {
 	background: url('../images/F1_map.png');
 	top: 172px;
@@ -1384,6 +1388,81 @@ px-app-nav.navbar--collapsed .login {
 	color: #8BBE3D;
 	margin-top: 0px;
 	font-size: 43px;
+}
+
+.aqi_status {
+	color: #8BBE3D;
+	margin-top: 0px;
+	font-size: 43px;
+}
+
+.machine_down_green {
+	background-color: #8bbe3d;
+}
+
+.machine_data {
+	margin-top: 20px;
+	min-height: 80px;
+	color: white;
+}
+
+.machine_up_orange {
+	background-color: #ff9000;
+}
+
+.machine_data>.h {
+	margin-top: 10px;
+	margin-bottom: 0px !important;
+}
+
+.machine_data>.d {
+	float: left;
+	margin-top: 10px;
+}
+
+.machine_data>.s {
+	margin-bottom: 0px !important;
+	margin-top: 16px;
+}
+
+.mahine_up_arrow {
+	position: absolute;
+	width: 45px;
+	height: 45px;
+	top: 22px;
+	text-align: center;
+	line-height: 45px;
+	border-radius: 50%;
+	background: #80AD38;
+	right: 10px;
+}
+
+.mahine_down_arrow {
+	position: absolute;
+	width: 45px;
+	height: 45px;
+	top: 22px;
+	text-align: center;
+	line-height: 45px;
+	border-radius: 50%;
+	right: 10px;
+	background: #ffa530;
+}
+
+.fa-arrow-up {
+	font-size: 27px !important;
+	position: absolute;
+	top: 9px;
+	right: 10px;
+	color: #fff;
+}
+
+.fa-arrow-down {
+	font-size: 27px !important;
+	position: absolute;
+	top: 9px;
+	right: 10px;
+	color: #fff;
 }
 
 /* end */
