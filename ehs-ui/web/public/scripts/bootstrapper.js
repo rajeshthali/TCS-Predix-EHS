@@ -16,7 +16,7 @@ require([ 'config' ], function(config) {
 			link.type = "text/css";
 			link.rel = "stylesheet";
 			link.href = url;
-			//console.log(url);
+			// console.log(url);
 			document.getElementsByTagName("head")[0].appendChild(link);
 		}
 	};

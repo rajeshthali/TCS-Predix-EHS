@@ -68,6 +68,31 @@ define([ 'angular', './sample-module' ], function(angular, sampleModule) {
 						cb(response);
 				});
 			},
+			prettyMs : function(timestamps) {
+				var dates = [];
+				for (var i = 0; i < timestamps.length; i++) {
+					var date = new Date(timestamps[i]);
+					var h = 0;
+					var m = 0;
+					var s = 0;
+					if (date.getHours() < 10)
+						h = '0' + date.getHours();
+					else
+						h = date.getHours();
+					if (date.getMinutes() < 10)
+						m = '0' + date.getMinutes();
+					else
+						m = date.getMinutes();
+					if (date.getSeconds() < 10)
+						s = '0' + date.getSeconds();
+					else
+						s = date.getSeconds();
+
+					var dateString = h + ':' + m + ':' + s;
+					dates.push(dateString);
+				}
+				return dates;
+			},
 			positionList : {
 				aqiMachine : [ [ {
 					top : 40,
@@ -208,7 +233,7 @@ define([ 'angular', './sample-module' ], function(angular, sampleModule) {
 					left : 50
 				}, {
 					top : 40,
-					left : 96
+					left : 71
 				}, {
 					top : 20,
 					left : 45

@@ -68,6 +68,7 @@ require.config({
 		lodash : '../bower_components/lodash/dist/lodash.min',
 		jquery : '../bower_components/jquery/dist/jquery.min',
 		highcharts : '../bower_components/highcharts/highcharts',
+		'solid-gauge' : '../bower_components/highcharts/modules/solid-gauge',
 
 		bootstrap : '../bower_components/bootstrap/dist/js/bootstrap.min',
 

@@ -657,6 +657,12 @@ px-app-nav.navbar--collapsed .login {
 	margin-left: 207px;
 }
 
+@media ( max-width : 970px) {
+	.center_class {
+		text-align: center;
+	}
+}
+
 .highwidth {
 	/* width: 720px; */
 	width: 79%;
@@ -1124,8 +1130,8 @@ px-app-nav.navbar--collapsed .login {
 
 .map_floor_center {
 	position: absolute;
-	height: 276px;
-	line-height: 276px;
+	height: 277px;
+	line-height: 277px;
 	width: 100%;
 	text-align: left;
 	padding-left: 20px;
@@ -1332,6 +1338,53 @@ px-app-nav.navbar--collapsed .login {
 	margin: auto;
 }
 
+#floor_0 {
+	background: url('../images/F1_map.png');
+	top: 172px;
+}
+
+#floor_1 {
+	background: url('../images/F2_map.png');
+	top: 132px;
+}
+
+#floor_2 {
+	background: url('../images/F3_map.png');
+	top: 92px;
+}
+
+#floor_0:hover {
+	background: url('../images/F1_map_hover.png');
+}
+
+#floor_1:hover {
+	background: url('../images/F2_map_hover.png');
+}
+
+#floor_2:hover {
+	background: url('../images/F3_map_hover.png');
+}
+
+.graph_class {
+	height: 250px;
+	margin-top: 20px;
+	margin-right: 20px;
+}
+
+.gauge_graph_class {
+	height: 150px;
+}
+
+.c3-chart-arc>.c3-gauge-value {
+	fill: #8bbe3d !important;
+	font-size: 31px !important;
+}
+
+.aqi_status {
+	color: #8BBE3D;
+	margin-top: 0px;
+	font-size: 43px;
+}
 
 /* end */
 

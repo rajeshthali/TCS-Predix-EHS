@@ -1,4 +1,4 @@
-define([ 'angular', './sample-module' ], function(angular, controllers) {
+define([ 'angular', './sample-module', ], function(angular, controllers) {
 	'use strict';
 	controllers.controller('AqiController', [ '$scope', '$http', '$state', '$log', 'PredixAssetService', 'PredixViewService', 'CalculationOneService', 'CalculationService', '$interval', 'AqiService', '$rootScope', 'AuthService', 'HygieneService', 'DashBoardService',
 			function($scope, $http, $state, $log, PredixAssetService, PredixViewService, CalculationOneService, CalculationService, $interval, AqiService, $rootScope, AuthService, HygieneService, DashBoardService) {
@@ -8,12 +8,26 @@ define([ 'angular', './sample-module' ], function(angular, controllers) {
 				$scope.aqiMachineLoading = true;
 				$scope.aqiAreaData = [];
 				$scope.aqiMachineData = [];
-				var interval = 30 * 1000;
+				var areaCharts = [];
+				var areaGaugeCharts = [];
+
+				$scope.areaChartConfig = {
+					options : {
+						chart : {
+							type : 'bar'
+						}
+					},
+					series : [ {
+						data : [ 10, 15 ]
+					} ],
+				};
+
+				var interval = 90 * 1000;
 				if (!$rootScope.floor) {
 					$rootScope.floor = 0;
 				}
 
-				console.log($rootScope.floor);
+				// console.log($rootScope.floor);
 				var loadData = function() {
 					AuthService.getTocken(function(token) {
 						loadAqiMachine($rootScope.floor);
@@ -26,6 +40,7 @@ define([ 'angular', './sample-module' ], function(angular, controllers) {
 					DashBoardService.getAqiMachineValues(floor, interval, function(res) {
 						if (res.length > 0) {
 							$scope.aqiMachineData = res[0].assets;
+							console.log($scope.aqiMachineData);
 						}
 						$("#aqi-machine-tab-content").fadeIn();
 						$scope.aqiMachineLoading = false;
@@ -39,13 +54,366 @@ define([ 'angular', './sample-module' ], function(angular, controllers) {
 						if (res.length > 0) {
 							$scope.aqiAreaData = res[0].assets;
 						}
-
 						$scope.aqiAreaLoading = false;
 						$scope.aqiAreaComparisonLoading = false;
 						$("#aqi-area-tab-content").fadeIn();
+
+						$scope.areaTabSlect(0);
+					});
+				};
+				$scope.areaTabSlect = function(index) {
+
+					$scope.aqiAreaData[index].data.status = getStatus($scope.aqiAreaData[index].data.maxAqi.name, $scope.aqiAreaData[index].data.maxAqi.aqiValue);
+					$('.graph_class').hide();
+					$('.area_gauge_chart_base').hide();
+					setTimeout(function() {
+						$('.graph_class').fadeIn();
+						loadValuesToGraph('#area_chart_' + index, DashBoardService.prettyMs($scope.aqiAreaData[index].data.timestamps), $scope.aqiAreaData[index].data.value);
+						loadGaugeChart('#area_gauge_chart_' + index, $scope.aqiAreaData[index].data.maxAqi.aqiValue);
+						$('.area_gauge_chart_base').fadeIn();
+
+					}, 300);
+				};
+				var graphColor = '#00acec';
+
+				var loadGaugeChart = function(id, value) {
+					loadChart(id, 0, 200, value);
+				};
+
+				var loadValuesToGraph = function(id, dataX, dataY) {
+					// console.log(dataX);
+					// console.log(dataY);
+
+					$(id).each(function() {
+
+						var chart = new Highcharts.Chart({
+							type : 'spline',
+							animation : Highcharts.svg,
+							marginRight : 10,
+							chart : {
+								renderTo : this
+							},
+							title : {
+								text : ''
+							},
+							tooltip : {
+								formatter : function() {
+									return '<b>' + this.series.name + '</b><br/>' + Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' + Highcharts.numberFormat(this.y, 2);
+								}
+							},
+							exporting : {
+								enabled : false
+							},
+
+							plotOptions : {
+								series : {
+									lineWidth : 1,
+									marker : {
+										enabled : false,
+									},
+								}
+							},
+							credits : {
+								enabled : false
+							},
+
+							xAxis : {
+								title : {
+									text : 'Time'
+								},
+								categories : dataX
+							},
+
+							yAxis : {
+								title : {
+									text : 'Air value'
+								},
+							},
+
+							series : [ {
+								name : 'AQI',
+								data : dataY,
+								type : 'areaspline',
+								color : graphColor,
+								fillColor : {
+									linearGradient : {
+										x1 : 0,
+										y1 : 1,
+										x2 : 0,
+										y2 : 1
+									},
+									stops : [ [ 1, graphColor ], [ 0, Highcharts.Color(graphColor).setOpacity(0).get('red') ], ]
+
+								},
+								lineWidth : 1,
+								marker : {
+									enabled : false,
+								},
+
+							} ]
+						});
+						areaCharts.push(chart);
 					});
 				};
 
+				var getColorForPercentage = function(pct) {
+					// console.log(pct);
+
+					for (var i = 1; i < percentColors.length - 1; i++) {
+						if (pct < percentColors[i].pct) {
+							break;
+						}
+					}
+					var lower = percentColors[i - 1];
+					var upper = percentColors[i];
+					var range = upper.pct - lower.pct;
+					var rangePct = (pct - lower.pct) / range;
+					var pctLower = 1 - rangePct;
+					var pctUpper = rangePct;
+					var color = {
+						r : Math.floor(lower.color.r * pctLower + upper.color.r * pctUpper),
+						g : Math.floor(lower.color.g * pctLower + upper.color.g * pctUpper),
+						b : Math.floor(lower.color.b * pctLower + upper.color.b * pctUpper)
+					};
+					return 'rgb(' + [ color.r, color.g, color.b ].join(',') + ')';
+					// or output as hex if preferred
+				}
+
+				var loadChart = function(selector, min, max, val) {
+					var per = (val / max);
+					var chart = c3.generate({
+						bindto : selector,
+						data : {
+
+							columns : [ [ 'data', val ] ],
+							type : 'gauge'
+						},
+						gauge : {
+							label : {
+								format : function(value, ratio) {
+									return value;
+								},
+								pattern : 'green'
+							},
+							min : min,
+							max : max,
+							units : '',
+							width : 15
+						},
+						color : {
+							pattern : [ getColorForPercentage(per) ]
+						},
+						size : {
+							height : 155,
+							width : 150
+						}
+					});
+				};
+				var percentColors = [ {
+					pct : 0.0,
+					color : {
+
+						r : 0x00,
+						g : 0xff,
+						b : 0
+					}
+				}, {
+					pct : 0.5,
+					color : {
+						r : 0xff,
+						g : 0xff,
+						b : 0
+					}
+				}, {
+					pct : 1.0,
+					color : {
+						r : 0xff,
+						g : 0x00,
+						b : 0
+					}
+				} ];
+
+				var getStatus = function(prominentParameter, max) {
+					var status = '';
+					switch (prominentParameter) {
+					case 'PM10':
+						if (max >= 0 && max <= 50) {
+							var status = 'Good';
+						} else if (max >= 51 && max <= 100) {
+							status = 'Satisfactory';
+
+						} else if (max >= 101 && max <= 250) {
+							status = 'Moderate';
+
+						} else if (max >= 251 && max <= 350) {
+							status = 'Poor';
+
+						} else if (max >= 351 && max <= 430) {
+							status = 'Very Poor';
+
+						} else if (max > 430) {
+							status = 'Severe';
+
+						}
+
+						break;
+					case 'PM2_5':
+						if (max >= 0 && max <= 30) {
+							status = 'Good';
+						} else if (max >= 31 && max <= 60) {
+							status = 'Satisfactory';
+
+						} else if (max >= 61 && max <= 90) {
+							status = 'Moderate';
+
+						} else if (max >= 91 && max <= 120) {
+							status = 'Poor';
+
+						} else if (max >= 121 && max <= 250) {
+							status = 'Very Poor';
+
+						} else if (max > 250) {
+							status = 'Severe';
+
+						}
+						break;
+					case 'NO2':
+						if (max >= 0 && max <= 40) {
+							status = 'Good';
+
+						} else if (max >= 41 && max <= 80) {
+							status = 'Satisfactory';
+
+						} else if (max >= 81 && max <= 180) {
+							status = 'Moderate';
+
+						} else if (max >= 181 && max <= 280) {
+							status = 'Poor';
+
+						} else if (max >= 281 && max <= 400) {
+							status = 'Very Poor';
+
+						} else if (max > 400) {
+							status = 'Severe';
+
+						}
+						break;
+					case 'O3':
+						if (max >= 0 && max <= 50) {
+							status = 'Good';
+
+						} else if (max >= 51 && max <= 100) {
+							status = 'Satisfactory';
+
+						} else if (max >= 101 && max <= 168) {
+							status = 'Moderate';
+
+						} else if (max >= 169 && max <= 208) {
+							status = 'Poor';
+
+						} else if (max >= 209 && max <= 748) {
+							status = 'Very Poor';
+
+						} else if (max > 748) {
+							status = 'Severe';
+
+						}
+						break;
+					case 'CO2':
+						if (max >= 0 && max <= 1.0) {
+							status = 'Good';
+
+						} else if (max >= 1.1 && max <= 2.0) {
+							status = 'Satisfactory';
+
+						} else if (max >= 2.1 && max <= 10) {
+							status = 'Moderate';
+
+						} else if (max >= 10.1 && max <= 17) {
+							status = 'Poor';
+
+						} else if (max >= 17.1 && max <= 34) {
+							status = 'Very Poor';
+
+						} else if (max > 34) {
+							status = 'Severe';
+
+						}
+						break;
+					case 'SO2':
+						if (max >= 0 && max <= 40) {
+							status = 'Good';
+
+						} else if (max >= 41 && max <= 80) {
+							status = 'Satisfactory';
+
+						} else if (max >= 81 && max <= 380) {
+							status = 'Moderate';
+
+						} else if (max >= 381 && max <= 800) {
+							status = 'Poor';
+
+						} else if (max >= 801 && max <= 1600) {
+							status = 'Very Poor';
+
+						} else if (max > 1600) {
+							status = 'Severe';
+
+						}
+						break;
+					case 'NH3':
+						if (max >= 0 && max <= 200) {
+							status = 'Good';
+
+						} else if (max >= 201 && max <= 400) {
+							status = 'Satisfactory';
+
+						} else if (max >= 401 && max <= 800) {
+							status = 'Moderate';
+
+						} else if (max >= 801 && max <= 1200) {
+							status = 'Poor';
+
+						} else if (max >= 801 && max <= 1200) {
+							status = 'Poor';
+
+						} else if (max >= 1201 && max <= 1800) {
+							status = 'Very Poor';
+
+						} else if (max > 1800) {
+							status = 'Severe';
+
+						}
+						break;
+					case 'PB':
+						if (max >= 0 && max <= 0.5) {
+							status = 'Good';
+
+						} else if (max >= 0.6 && max <= 1.0) {
+							status = 'Satisfactory';
+
+						} else if (max >= 1.1 && max <= 2.0) {
+							status = 'Moderate';
+
+						} else if (max >= 2.1 && max <= 3.0) {
+							status = 'Poor';
+
+						} else if (max >= 3.1 && max <= 3.5) {
+							status = 'Very Poor';
+
+						} else if (max > 3.5) {
+							status = 'Severe';
+
+						}
+						break;
+
+					default:
+						break;
+					}
+
+					return status;
+
+				};
 			} ]);
 
 });
