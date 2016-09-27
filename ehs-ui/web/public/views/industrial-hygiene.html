@@ -7,102 +7,68 @@ background-color: #ffffff;
 </style>
 <div class="loaderpg"></div>
 <img src='/images/25.gif' class="lad_img">
+<!-- <div class="row">
+		<div class="col-md-5 pull-right text-right" style="margin-top: 10px;">
+			<ul class="dash_op">
+				<li class="active"><a ng-click="setCompliant('all')" data-toggle="tab">All</a></li>
+				<li><a ng-click="setCompliant('compliant')" data-toggle="tab">compliant</a></li>
+				<li><a ng-click="setCompliant('non')" data-toggle="tab">Non-compliant</a></li>
+			</ul>
+		</div>
+</div> -->
 <div >
 	<div class="col-md-3 hygn_background">
 		<div class="hygn_rect_curve_1">
-
-			<!-- <img src="/images/icon_industrial_hygiene.png" class="hygn_icons_1"
-				style="border: 1px solid white;"> -->
 			<div class="hygn_icons_1"></div>
 			<h4 class="title_hygn">Industrial Hygiene</h4>
 
 		</div>
-		<div class="hygn_area_tab">
-			<h6 class="box_text_hygn">SMT Line1</h6>
+		<div class="hygn_area_tab" ng-repeat="area in hygnareaName">
+			<h6 class="box_text_hygn">{{area.assetName}}</h6>
 		</div>
-		<div class="hygn_area_tab">
-			<h6 class="box_text_hygn">SMT Line2</h6>
-		</div>
-		<div class="hygn_area_tab">
-			<h6 class="box_text_hygn">Production Ground Floor</h6>
-		</div>
+		
 
 	</div>
 	<div class="col-md-3 hygn_background">
 		<div class="hygn_rect_curve_2">
-			<!-- <img src="/images/icon_air_quality.png" class="hygn_icons_2"
-				style="border: 1px solid white;"> -->
-				<div class="hygn_icons_2"></div>
+			<div class="hygn_icons_2"></div>
 			<h4 class="title_hygn">Humidity</h4>
 		</div>
-		<div class="hygn_data_tab" ng-click="gotoDetailsView()">
+		<div class="hygn_data_tab" ng-click="gotoDetailsView()" ng-repeat="data in floordata">
 			<p class="top">
-				<span class="data_text">{{smt_1_value.humidity}}%</span>
+				<span class="data_text">{{data.humidity}}%</span>
 			</p>
 		</div>
-		<div class="hygn_data_tab" ng-click="gotoDetailsView()">
-			<p class="top">
-				<span class="data_text">{{smt_2_value.humidity}}%</span>
-			</p>
-		</div>
-		<div class="hygn_data_tab" ng-click="gotoDetailsView()">
-			<p class="top">
-				<span class="data_text">{{pgf_value.humidity}}%</span>
-			</p>
-		</div>
+		
 	</div>
 
 
 	<div class="col-md-3 hygn_background">
 		<div class="hygn_rect_curve_3">
-			<!-- <img src="/images/icon_noise.png" class="hygn_icons_3"
-				style="border: 1px solid white;"> -->
-				<div class="hygn_icons_3"></div>
+			<div class="hygn_icons_3"></div>
 			<h4 class="title_hygn">Noise</h4>
 		</div>
-		<div class="hygn_data_tab" ng-click="gotoDetailsView()">
+		<div class="hygn_data_tab" ng-click="gotoDetailsView()" ng-repeat="data in floordata">
 			<p class="top">
-				<span class="data_text">{{smt_1_value.noise}}db</span>
+				<span class="data_text">{{data.noise}}db</span>
 			</p>
 
 		</div>
-		<div class="hygn_data_tab" ng-click="gotoDetailsView()">
-			<p class="top">
-				<span class="data_text">{{smt_2_value.noise}}db</span>
-			</p>
-		</div>
-		<div class="hygn_data_tab" ng-click="gotoDetailsView()">
-			<p class="top">
-				<span class="data_text">{{pgf_value.noise}}db</span>
-			</p>
-		</div>
+		
 
 	</div>
 	<div class="col-md-3 hygn_background">
 		<div class="hygn_rect_curve_4">
-			<!-- <img src="/images/icon_temperature.png" class="hygn_icons_4"
-				style="border: 1px solid white;"> -->
 			<div class="hygn_icons_4"></div>
 			<h4 class="title_hygn">Temperature</h4>
 		</div>
-		<div class="hygn_data_tab" ng-click="gotoDetailsView()">
+		<div class="hygn_data_tab" ng-click="gotoDetailsView()" ng-repeat="data in floordata">
 			<p class="top">
-				<span class="data_text">{{smt_1_value.temperature}}%<sup>0</sup>C
+				<span class="data_text">{{data.temperature}}<sup>0</sup>C
 				</span>
 			</p>
 		</div>
-		<div class="hygn_data_tab" ng-click="gotoDetailsView()">
-			<p class="top">
-				<span class="data_text">{{smt_2_value.temperature}}%<sup>0</sup>C
-				</span>
-			</p>
-		</div>
-		<div class="hygn_data_tab" ng-click="gotoDetailsView()">
-			<p class="top">
-				<span class="data_text">{{pgf_value.temperature}}%<sup>0</sup>C
-				</span>
-			</p>
-		</div>
+		
 	</div>
 </div>
 
