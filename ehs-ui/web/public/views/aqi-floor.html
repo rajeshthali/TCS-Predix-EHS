@@ -4,8 +4,8 @@
 			<div class="col-md-6" style="padding-left: 5px; padding-right: 5px;">
 				<div class="col-md-12  aqi-tab-base">
 					<ul class="nav nav-tabs">
-						<li class="active"><a data-toggle="tab" href="" data-target="#aqi-area">Indoor Air Quality</a></li>
-						<li><a data-toggle="tab" href="" data-target="#aqi-comparison">AQI Comparison</a></li>
+						<li class="active"><a data-toggle="tab" href="" data-target="#aqi-area" ng-click="aqiTabChange('aqi')">Indoor Air Quality</a></li>
+						<li><a data-toggle="tab" href="" data-target="#aqi-comparison" ng-click="aqiTabChange('aqi-comparison')">AQI Comparison</a></li>
 					</ul>
 
 					<div class="tab-content aqi-tab-base-inner">
@@ -17,7 +17,7 @@
 							<div id="aqi-area-tab-content" class="tab-content aqi-tab-base-content-inner" style="display: none;">
 								<div ng-repeat="area in aqiAreaData" id="aqi_area_{{$index}}" ng-class="{'active':$index==tabIndexArea}" class="tab-pane fade in">
 
-									<div id="area_chart_{{$index}}" class="graph_class"></div>
+									<div ui-sref="aqi-details" id="area_chart_{{$index}}" class="graph_class"></div>
 
 									<div class="col-md-12 area_gauge_chart_base">
 										<div class="row">
@@ -38,8 +38,15 @@
 								</div>
 							</div>
 						</div>
-						<div id="aqi-comparison" class="tab-pane fade ">
+						<div id="aqi-comparison" class="tab-pane fade aqi-comparison-tab-base-content">
 							<img alt="" class="loading_image" ng-show="aqiAreaComparisonLoading" src="images/25.gif">
+							<ul class="nav nav-tabs" id="aqi-area-tab">
+								<li ng-repeat="area in aqiAreaComparison" ng-class="{'active':$index==tabIndexArea}"><a data-toggle="tab" href="#" data-target="#aqi_area_{{$index}}"
+									ng-click="selectTab($index,'comparison')">{{area.assetName}}</a></li>
+							</ul>
+							<div id="aqi-area-tab-content" class="tab-content aqi-comparison-tab-base-content-inner" style="display: none;">
+								<div ng-repeat="area in aqiAreaComparison" id="aqi_area_comparison_{{$index}}" ng-class="{'active':$index==tabIndexMachineComparison}" class="tab-pane fade in"></div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -102,7 +109,9 @@
 										</div>
 										<div class="col-md-6 col-xs-12">
 											<h4 class="status_txt">Status</h4>
-											<h1 style="font-size: 30px;" ng-class="{'warn_sta': machine.data.maxAqi.aqiValue>=maxValue , 'stis_sta': machine.data.maxAqi.aqiValue<maxValue}">{{machine.data.status}}</h1>
+											<h1 style="font-size: 30px;" ng-class="{'warn_sta': machine.data.maxAqi.aqiValue>=maxValue , 'stis_sta': machine.data.maxAqi.aqiValue<maxValue}">
+												<span ng-if="machine.data.maxAqi.aqiValue<=maxValue">Satisfactory</span> <span ng-if="machine.data.maxAqi.aqiValue>maxValue">Warning</span>
+											</h1>
 										</div>
 									</div>
 

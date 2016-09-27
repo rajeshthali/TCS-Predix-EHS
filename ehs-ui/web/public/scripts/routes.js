@@ -60,7 +60,18 @@ define([ 'angular', 'angular-ui-router' ], function(angular) {
 			url : '/detail_parameter',
 			templateUrl : 'views/detail_parameter.html',
 			controller : 'detilparaCtrl'
-		}).state('detilpara', {
+		}).state('aqi-details', {
+			url : '/aqi-details',
+			templateUrl : 'views/aqi-details-page.html',
+			controller : 'AQIDetailsPageController',
+			params : {
+				'floor' : null,
+				'type' : null,
+				'assetName' : null
+			}
+		})
+
+		.state('detilpara', {
 			url : '/detilgraph',
 			templateUrl : 'views/detilgraph.html',
 			controller : 'detilgraphCtrl'

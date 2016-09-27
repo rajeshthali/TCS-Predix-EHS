@@ -1306,6 +1306,142 @@ px-app-nav.navbar--collapsed .login {
 	margin-top: 3px;
 }
 
+
+
+
+
+
+
+
+
+.aqi-details-tab-base>ul {
+	margin-left: 0px !important;
+	margin-bottom: 0px !important;
+	border: 0px !important;
+}
+
+.aqi-details-tab-base>ul>li>a {
+	border: 0px;
+	border-radius: 0px;
+	margin: 0px;
+	line-height: 20px;
+	background-color: #fff !important;
+	color: #565656 !important;
+}
+
+.aqi-details-tab-base-inner {
+	border: 1px solid #3694F8;
+	padding: 10px;
+	background-color: #fff;
+	min-height: 300px;
+}
+
+.aqi-details-tab-base>.nav-tabs>.active>a {
+	border: 0px !important;
+	background: #3694F8 !important;
+	color: #fff !important;
+}
+
+.aqi-details-tab-base>ul>li>a:hover {
+	margin: 0px;
+}
+
+.aqi-details-tab-base>ul>li {
+	margin: 0px 5px 0px 0px;
+	border: 0px;
+	border-radius: 0px;
+}
+
+.aqi-details-tab-base-content>ul {
+	margin-left: 0px !important;
+	margin-bottom: 0px !important;
+	border: 0px !important;
+}
+
+.aqi-details-tab-base-content>ul>li>a {
+	border: 0px;
+	border-radius: 0px;
+	margin: 0px;
+	line-height: 5px;
+	background-color: #fff !important;
+	color: #3b3b3f !important;
+	font-size: 12px;
+}
+
+
+
+.aqi-details-tab-base-content-inner {
+	border: 1px solid #8BBE3D;
+	padding: 10px;
+	background-color: #fff;
+	height: 270px;
+}
+
+.aqi-details-tab-base-content>.nav-tabs>.active>a {
+	border: 0px !important;
+	background: #8BBE3D !important;
+	color: #fff !important;
+}
+
+.aqi-details-tab-base-content>ul>li>a:hover {
+	margin: 0px;
+}
+
+.aqi-details-tab-base-content>ul>li {
+	margin: 0px 3px 0px 0px;
+	border-radius: 0px;
+	border: 1px solid #8bbe3d;
+	margin-bottom: -1px;
+	margin-top: 3px;
+}
+
+
+
+
+
+
+.aqi-comparison-tab-base-content>ul {
+	margin-left: 0px !important;
+	margin-bottom: 0px !important;
+	border: 0px !important;
+}
+
+.aqi-comparison-tab-base-content>ul>li>a {
+	border: 0px;
+	border-radius: 0px;
+	margin: 0px;
+	line-height: 5px;
+	background-color: #fff !important;
+	color: #3b3b3f !important;
+	font-size: 12px;
+}
+
+.aqi-comparison-tab-base-content-inner {
+	border: 1px solid #8BBE3D;
+	padding: 10px;
+	background-color: #fff;
+	min-height: 529px;
+}
+
+.aqi-comparison-tab-base-content>.nav-tabs>.active>a {
+	border: 0px !important;
+	background: #8BBE3D !important;
+	color: #fff !important;
+}
+
+.aqi-comparison-tab-base-content>ul>li>a:hover {
+	margin: 0px;
+}
+
+.aqi-comparison-tab-base-content>ul>li {
+	margin: 0px 3px 0px 0px;
+	border-radius: 0px;
+	border: 1px solid #8bbe3d;
+	margin-bottom: -1px;
+	margin-top: 3px;
+}
+
+
 .dash_op li {
 	cursor: pointer;
 }
@@ -1375,6 +1511,11 @@ px-app-nav.navbar--collapsed .login {
 	margin-right: 20px;
 }
 
+.aqi_details_graph_class {
+	height: 230px;
+	margin-top: 20px;
+	margin-right: 20px;
+}
 .gauge_graph_class {
 	height: 150px;
 }

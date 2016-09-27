@@ -1,6 +1,7 @@
 define([ 'angular', './sample-module' ], function(angular, controllers) {
 	'use strict';
 	controllers.controller('DashboardsCtrlFloor', [
+			'$compile',
 			'$state',
 			'$timeout',
 			'$interval',
@@ -13,7 +14,7 @@ define([ 'angular', './sample-module' ], function(angular, controllers) {
 			'AuthService',
 			'HygieneService',
 			'DashBoardService',
-			function($state, $timeout, $interval, $scope, $rootScope, $http, $log, PredixAssetService, PredixViewService, AuthService, HygieneService, DashBoardService) {
+			function($compile, $state, $timeout, $interval, $scope, $rootScope, $http, $log, PredixAssetService, PredixViewService, AuthService, HygieneService, DashBoardService) {
 				var floorArray = [];
 				var maxFloor = 3;
 				var maxOpacity = .99;
@@ -244,10 +245,22 @@ define([ 'angular', './sample-module' ], function(angular, controllers) {
 								+ '<div class="popup_content"> Temperature : <b>' + avgHygiene.temperature + ' &#8451;</b></div>';
 					}
 
-					var html = '<div class="icon ' + iconClass + ' ' + type + '" style="top: ' + top + '%; left: ' + left + '%; background: url(\'../images/' + image + '\');">' + '<div style="line-height: 20px;"  class="popup popup-dropdown-content ' + tag + '" >' + innerHtml + '</div></div>';
-					floor.append(html);
+					var html = '<div ng-click="gotoDetails(\'' + floorIndex + '\',\'' + iconClass + '\',\'' + data.assetName + '\')" class="icon ' + iconClass + ' ' + type + '" style="top: ' + top + '%; left: ' + left + '%; background: url(\'../images/' + image + '\');">'
+							+ '<div style="line-height: 20px;"  class="popup popup-dropdown-content ' + tag + '" >' + innerHtml + '</div></div>';
+					floor.append($compile(html)($scope));
 				};
+				$scope.gotoDetails = function(floor, type, assetName) {
+					// console.log(floor + ' ' + type + ' ' + assetName);
+					if (type == 'machine' || type === 'area') {
+						$state.go('aqi-details', {
+							'floor' : floor,
+							'type' : type,
+							'assetName' : assetName
+						})
+					} else {
 
+					}
+				};
 				var avgArrayValue = function(data) {
 					var avg = 0.0;
 					for (var i = 0; i < data.length; i++) {
