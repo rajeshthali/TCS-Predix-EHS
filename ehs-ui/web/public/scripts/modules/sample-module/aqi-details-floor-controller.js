@@ -2,7 +2,7 @@ define([ 'angular', './sample-module' ], function(angular, controllers) {
 	'use strict';
 	controllers.controller('AQIDetailsPageController', [ '$state', '$timeout', '$interval', '$scope', '$rootScope', '$http', '$log', 'PredixAssetService', 'PredixViewService', 'AuthService', 'HygieneService', 'DashBoardService', '$stateParams',
 			function($state, $timeout, $interval, $scope, $rootScope, $http, $log, PredixAssetService, PredixViewService, AuthService, HygieneService, DashBoardService, $stateParams) {
-				//console.log($stateParams);
+				// console.log($stateParams);
 				$scope.maxValue = 50;
 				$scope.aqiAreaLoading = true;
 				$scope.aqiMachineLoading = true;
@@ -24,14 +24,14 @@ define([ 'angular', './sample-module' ], function(angular, controllers) {
 				}
 				var startDynamicUpdateMachine = function() {
 					intervalPromiseMachine = $interval(function() {
-						//console.log('fetching machine details');
+						// console.log('fetching machine details');
 						loadAqiMachine($rootScope.floor);
 					}, 12000);
 				};
 
 				var startDynamicUpdateArea = function() {
 					intervalPromiseArea = $interval(function() {
-						//console.log('fetching area details');
+						// console.log('fetching area details');
 						loadAqiArea($rootScope.floor);
 					}, 12000);
 				};
@@ -62,7 +62,7 @@ define([ 'angular', './sample-module' ], function(angular, controllers) {
 								$scope.aqiAreaData = res[0].assets;
 								$scope.aqiAreaComparison = res[0].assets;
 								$("#aqi-area-tab-content").fadeIn();
-								$scope.Tab($scope.tabIndexArea, 'area');
+								$scope.selectTab($scope.tabIndexArea, 'area');
 								startDynamicUpdateArea();
 							}
 							$scope.aqiAreaLoading = false;
