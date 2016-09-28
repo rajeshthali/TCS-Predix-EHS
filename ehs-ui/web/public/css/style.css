@@ -1615,8 +1615,6 @@ px-app-nav.navbar--collapsed .login {
 }
 
 .floor_list_base ul li.disabled {
-	background: gray;
-	color: #fff;
 	cursor: default;
 }
 

@@ -69,6 +69,10 @@ define([ 'angular', 'angular-ui-router' ], function(angular) {
 				'type' : null,
 				'assetName' : null
 			}
+		}).state('hygiene-details', {
+			url : '/hygiene-details',
+			templateUrl : 'views/hygiene-details-page.html',
+			controller : 'HygieneDetailsPageController'
 		})
 
 		.state('detilpara', {
