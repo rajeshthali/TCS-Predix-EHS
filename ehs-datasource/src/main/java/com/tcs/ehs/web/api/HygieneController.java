@@ -35,53 +35,64 @@ public class HygieneController {
 	@Autowired
 	HygieneCalculation hygieneCalculation;
 
-	@ApiImplicitParams({ @ApiImplicitParam(name = "Authorization", value = "UAA Token along with 'Bearer'", required = true, dataType = "string", paramType = "header"),
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "Authorization", value = "UAA Token along with 'Bearer'", required = true, dataType = "string", paramType = "header"),
 			@ApiImplicitParam(name = "interval", value = "It is for calculating the time interval from current time. StartTime = (CURRENT_TIME - interval) and EndTime = CURRENT_TIME", required = true, dataType = "Long - Miliseconds Format", paramType = "query") })
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public ResponseEntity<Object> hygieneQuery(@RequestHeader("Authorization") String authorization, @RequestParam Long interval) throws JsonProcessingException {
+	public ResponseEntity<Object> hygieneQuery(@RequestHeader("Authorization") String authorization,
+			@RequestParam Long interval) throws JsonProcessingException {
 		Value value = TimeUtils.calculateInterval(interval);
-		DatapointsResponse datapointsResponse = timeseriesRequester.requestForHygiene(Constants.QueryTagsHygiene.Hygiene, authorization, value.getStartTime(), value.getEndTime());
+		DatapointsResponse datapointsResponse = timeseriesRequester.requestForHygiene(
+				Constants.QueryTagsHygiene.Hygiene, authorization, value.getStartTime(), value.getEndTime());
 		Collection<Floor> floors = timeSeriesHygieneParser.parseFloor(datapointsResponse);
 		if (floors.size() > 0)
 			return new ResponseEntity<Object>(floors, HttpStatus.OK);
 		else
-			return new ResponseEntity<Object>("No Timeseriese data found", HttpStatus.NOT_FOUND);
+			return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
 	}
 
 	@RequestMapping(value = "/{floor}", method = RequestMethod.GET)
-	public ResponseEntity<Object> hygieneQueryFloor(@RequestHeader("Authorization") String authorization, @RequestParam Long interval, @PathVariable String floor) throws JsonProcessingException {
+	public ResponseEntity<Object> hygieneQueryFloor(@RequestHeader("Authorization") String authorization,
+			@RequestParam Long interval, @PathVariable String floor) throws JsonProcessingException {
 		Value value = TimeUtils.calculateInterval(interval);
-		DatapointsResponse datapointsResponse = timeseriesRequester.requestForHygiene(Constants.QueryTagsHygiene.Hygiene, floor, authorization, value.getStartTime(), value.getEndTime());
+		DatapointsResponse datapointsResponse = timeseriesRequester.requestForHygiene(
+				Constants.QueryTagsHygiene.Hygiene, floor, authorization, value.getStartTime(), value.getEndTime());
 		Collection<Floor> floors = timeSeriesHygieneParser.parseFloor(datapointsResponse);
 		if (floors.size() > 0)
 			return new ResponseEntity<Object>(floors, HttpStatus.OK);
 		else
-			return new ResponseEntity<Object>("No Timeseriese data found", HttpStatus.NOT_FOUND);
+			return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
 	}
 
 	@RequestMapping(value = "/{floor}/{assetName}", method = RequestMethod.GET)
-	public ResponseEntity<Object> hygieneiQueryFloorAsset(@RequestHeader("Authorization") String authorization, @RequestParam Long interval, @PathVariable String floor, @PathVariable String assetName)
+	public ResponseEntity<Object> hygieneiQueryFloorAsset(@RequestHeader("Authorization") String authorization,
+			@RequestParam Long interval, @PathVariable String floor, @PathVariable String assetName)
 			throws JsonProcessingException {
 		Value value = TimeUtils.calculateInterval(interval);
-		DatapointsResponse datapointsResponse = timeseriesRequester.requestForHygiene(Constants.QueryTagsHygiene.Hygiene, floor, assetName, authorization, value.getStartTime(), value.getEndTime());
+		DatapointsResponse datapointsResponse = timeseriesRequester.requestForHygiene(
+				Constants.QueryTagsHygiene.Hygiene, floor, assetName, authorization, value.getStartTime(),
+				value.getEndTime());
 		Collection<Floor> floors = timeSeriesHygieneParser.parseFloor(datapointsResponse);
 		if (floors.size() > 0)
 			return new ResponseEntity<Object>(floors, HttpStatus.OK);
 		else
-			return new ResponseEntity<Object>("No Timeseriese data found", HttpStatus.NOT_FOUND);
+			return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
 	}
 
 	@RequestMapping(value = "/dashboard/{floor}/{assetName}", method = RequestMethod.GET)
-	public ResponseEntity<Object> hygieneiQueryFloorAssetDashBoard(@RequestHeader("Authorization") String authorization, @RequestParam Long interval, @PathVariable String floor,
-			@PathVariable String assetName) throws JsonProcessingException {
+	public ResponseEntity<Object> hygieneiQueryFloorAssetDashBoard(@RequestHeader("Authorization") String authorization,
+			@RequestParam Long interval, @PathVariable String floor, @PathVariable String assetName)
+			throws JsonProcessingException {
 		Value value = TimeUtils.calculateInterval(interval);
-		DatapointsResponse datapointsResponse = timeseriesRequester.requestForHygiene(Constants.QueryTagsHygiene.Hygiene, floor, assetName, authorization, value.getStartTime(), value.getEndTime());
+		DatapointsResponse datapointsResponse = timeseriesRequester.requestForHygiene(
+				Constants.QueryTagsHygiene.Hygiene, floor, assetName, authorization, value.getStartTime(),
+				value.getEndTime());
 		Collection<Floor> floors = timeSeriesHygieneParser.parseFloor(datapointsResponse);
 		floors = hygieneCalculation.getDashBoardValues(floors);
 		if (floors.size() > 0) {
 			return new ResponseEntity<Object>(floors, HttpStatus.OK);
 		} else
-			return new ResponseEntity<Object>("No Timeseriese data found", HttpStatus.NOT_FOUND);
+			return new ResponseEntity<Object>(HttpStatus.NO_CONTENT);
 	}
 
 }
