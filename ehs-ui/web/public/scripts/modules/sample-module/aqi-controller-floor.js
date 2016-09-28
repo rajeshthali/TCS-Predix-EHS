@@ -4,6 +4,7 @@ define([ 'angular', './sample-module', ], function(angular, controllers) {
 			function($scope, $http, $state, $log, PredixAssetService, PredixViewService, CalculationOneService, CalculationService, $interval, AqiService, $rootScope, AuthService, HygieneService, DashBoardService) {
 				var areaCharts = [];
 				var areaGaugeCharts = [];
+				var isLoading = false;
 				var initVariables = function() {
 					$scope.maxValue = 50;
 					$scope.aqiAreaLoading = true;
@@ -39,10 +40,12 @@ define([ 'angular', './sample-module', ], function(angular, controllers) {
 
 				$scope.floor = 0;
 				$scope.changeFloor = function(floor) {
-					$scope.floor = floor;
-					$scope.stop();
-					initVariables();
-					loadData();
+					if (!$scope.aqiMachineLoading && !$scope.aqiMachineLoading) {
+						$scope.floor = floor;
+						$scope.stop();
+						initVariables();
+						loadData();
+					}
 				};
 				var dynamicUpdateMachineStarted = false;
 				var dynamicUpdateAreaStarted = false;

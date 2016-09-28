@@ -34,10 +34,12 @@ define([ 'angular', './sample-module' ], function(angular, controllers) {
 
 				$scope.floor = 0;
 				$scope.changeFloor = function(floor) {
-					$scope.floor = floor;
-					$scope.stop();
-					initVariables();
-					loadData();
+					if (!$scope.aqiAreaLoading && !$scope.aqiMachineLoading) {
+						$scope.floor = floor;
+						$scope.stop();
+						initVariables();
+						loadData();
+					}
 				};
 
 				var interval = 2 * 60 * 1000;
