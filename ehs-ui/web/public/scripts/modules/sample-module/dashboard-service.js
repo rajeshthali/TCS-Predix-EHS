@@ -46,6 +46,35 @@ define([ 'angular', './sample-module' ], function(angular, sampleModule) {
 						cb(response);
 				});
 			},
+			getAqiAreaLastWeek : function(floor, interval, cb) {
+				var currentMs = (new Date()).getTime();
+				var twoDays = 1000 * 60 * 60 * 24 * 2;
+
+				var startTime = currentMs - twoDays - interval;
+				var endTime = currentMs - twoDays;
+
+				var thisObject = this;
+
+				if (!$rootScope.token) {
+					AuthService.getTocken(function(token) {
+						thisObject.getAqiAreaWithStartTimeEndTime(token, floor, startTime, endTime, cb);
+					});
+				} else {
+					thisObject.getAqiAreaWithStartTimeEndTime($rootScope.token, floor, startTime, endTime, cb);
+				}
+			},
+			getAqiAreaWithStartTimeEndTime : function(token, floor, startTime, endTime, cb) {
+				$http({
+					method : 'GET',
+					url : Config.baseUrl + '/api/aqi/areaWithStartTimeEndTime/' + floor + '?startTime=' + startTime + '&endTime=' + endTime,
+					headers : {
+						'Authorization' : token
+					}
+				}).success(function(response) {
+					if (cb)
+						cb(response);
+				});
+			},
 			getHygieneValues : function(floor, interval, cb) {
 				var thisObject = this;
 				if (!$rootScope.token) {

@@ -7,10 +7,13 @@ define([ 'angular', './sample-module', ], function(angular, controllers) {
 				$scope.aqiAreaComparisonLoading = true;
 				$scope.aqiMachineLoading = true;
 				$scope.aqiAreaData = null;
+				$scope.aqiAreaComparison = null;
 				$scope.aqiMachineData = null;
 				$scope.tabIndexArea = 0;
 				$scope.tabIndexMachine = 0;
+				$scope.tabIndexAreaComparison = 0;
 				$scope.tabIndexMachineComparison = 0;
+				$scope.aqiAreaComparisonLastWeek = null;
 				var areaCharts = [];
 				var areaGaugeCharts = [];
 
@@ -45,7 +48,7 @@ define([ 'angular', './sample-module', ], function(angular, controllers) {
 						$scope.selectTab($scope.tabIndexMachine, 'machine');
 						break;
 					case 'aqi-comparison':
-
+						$scope.selectTab($scope.tabIndexAreaComparison, 'comparison');
 						break;
 
 					default:
@@ -122,6 +125,16 @@ define([ 'angular', './sample-module', ], function(angular, controllers) {
 							if (res.length > 0) {
 								$scope.aqiAreaData = res[0].assets;
 								$scope.aqiAreaComparison = res[0].assets;
+								loadGaugeChart('#aqi_area_comparison_chart_' + $scope.tabIndexAreaComparison, $scope.aqiAreaComparison[$scope.tabIndexAreaComparison].data.maxAqi.aqiValue);
+								//console.log('getAqiAreaValues > ' + $scope.aqiAreaComparisonLastWeek)
+								//console.log('$scope.aqiAreaComparison > ' + $scope.aqiAreaComparison);
+								if ($scope.aqiAreaComparisonLastWeek) {
+									loadGaugeChart('#aqi_area_comparison_chart_last_week_' + $scope.tabIndexAreaComparison, $scope.aqiAreaComparisonLastWeek[$scope.tabIndexAreaComparison].data.maxAqi.aqiValue);
+									$scope.aqiAreaComparison[$scope.tabIndexAreaComparison].data.maxAqiLastWeek = $scope.aqiAreaComparisonLastWeek[$scope.tabIndexAreaComparison].data.maxAqi;
+									//console.log('getAqiAreaValues');
+									//console.log($scope.aqiAreaComparisonLastWeek);
+								}
+
 								$("#aqi-area-tab-content").fadeIn();
 								$scope.selectTab($scope.tabIndexArea, 'area');
 								if (!dynamicUpdateAreaStarted) {
@@ -131,7 +144,24 @@ define([ 'angular', './sample-module', ], function(angular, controllers) {
 							}
 							$scope.aqiAreaLoading = false;
 							$scope.aqiAreaComparisonLoading = false;
+
+							DashBoardService.getAqiAreaLastWeek(floor, interval, function(res) {
+
+								if (res.length > 0) {
+									//console.log('getAqiAreaLastWeek > ' + $scope.aqiAreaComparison);
+									if ($scope.aqiAreaComparison) {
+										$scope.aqiAreaComparisonLastWeek = res[0].assets;
+										//console.log('$scope.aqiAreaComparisonLastWeek > ' + $scope.aqiAreaComparisonLastWeek);
+										loadGaugeChart('#aqi_area_comparison_chart_last_week_' + $scope.tabIndexAreaComparison, $scope.aqiAreaComparisonLastWeek[$scope.tabIndexAreaComparison].data.maxAqi.aqiValue);
+										$scope.aqiAreaComparison[$scope.tabIndexAreaComparison].data.maxAqiLastWeek = $scope.aqiAreaComparisonLastWeek[$scope.tabIndexAreaComparison].data.maxAqi;
+										//console.log('getAqiAreaLastWeek');
+										//console.log($scope.aqiAreaComparisonLastWeek);
+									}
+								}
+							});
+
 						});
+
 					} else {
 						DashBoardService.getAqiAreaValues(floor, interval, function(res) {
 							if (res.length > 0) {
@@ -201,7 +231,19 @@ define([ 'angular', './sample-module', ], function(angular, controllers) {
 						$scope.aqiMachineData[index].data.status = getStatus($scope.aqiMachineData[index].data.maxAqi.name, $scope.aqiMachineData[index].data.maxAqi.aqiValue);
 						// console.log($scope.aqiMachineData[index].data);
 
-						//console.log(">> " + $scope.tabIndexMachine);
+						// console.log(">> " + $scope.tabIndexMachine);
+					} else if (type === 'comparison') {
+						$scope.tabIndexAreaComparison = index;
+						if ($scope.aqiAreaComparison) {
+							loadGaugeChart('#aqi_area_comparison_chart_' + index, $scope.aqiAreaComparison[index].data.maxAqi.aqiValue);
+						}
+						if ($scope.aqiAreaComparisonLastWeek) {
+							loadGaugeChart('#aqi_area_comparison_chart_last_week_' + index, $scope.aqiAreaComparisonLastWeek[index].data.maxAqi.aqiValue);
+
+						}
+						if ($scope.aqiAreaComparisonLastWeek && $scope.aqiAreaComparison) {
+							$scope.aqiAreaComparison[$scope.tabIndexAreaComparison].data.maxAqiLastWeek = $scope.aqiAreaComparisonLastWeek[$scope.tabIndexAreaComparison].data.maxAqi;
+						}
 					}
 
 				};

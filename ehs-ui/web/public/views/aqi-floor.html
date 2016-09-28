@@ -41,11 +41,32 @@
 						<div id="aqi-comparison" class="tab-pane fade aqi-comparison-tab-base-content">
 							<img alt="" class="loading_image" ng-show="aqiAreaComparisonLoading" src="images/25.gif">
 							<ul class="nav nav-tabs" id="aqi-area-tab">
-								<li ng-repeat="area in aqiAreaComparison" ng-class="{'active':$index==tabIndexArea}"><a data-toggle="tab" href="#" data-target="#aqi_area_{{$index}}"
+								<li ng-repeat="area in aqiAreaComparison" ng-class="{'active':$index==tabIndexArea}"><a data-toggle="tab" href="#" data-target="#aqi_area_comparison_{{$index}}"
 									ng-click="selectTab($index,'comparison')">{{area.assetName}}</a></li>
 							</ul>
-							<div id="aqi-area-tab-content" class="tab-content aqi-comparison-tab-base-content-inner" style="display: none;">
-								<div ng-repeat="area in aqiAreaComparison" id="aqi_area_comparison_{{$index}}" ng-class="{'active':$index==tabIndexMachineComparison}" class="tab-pane fade in"></div>
+							<div id="aqi-area-comparison-tab-content" class="tab-content aqi-comparison-tab-base-content-inner" style="">
+								<div ng-repeat="area in aqiAreaComparison" id="aqi_area_comparison_{{$index}}" ng-class="{'active':$index==tabIndexMachineComparison}" class="tab-pane fade in">
+									<div class="row">
+										<h6 class="prami_txt" style="text-align: center;">Current AQI</h6>
+										<div class="col-md-12 col-xs-12">
+											<div class="" style="text-align: center;">
+												<div id="aqi_area_comparison_chart_{{$index}}" class="gauge_graph_class"></div>
+												<h6 class="prami_txt">AQI</h6>
+												<h6 class="prami_txt">Prominent Pollutant : {{area.data.maxAqi.name}}</h6>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-12 col-xs-12">
+											<h6 class="prami_txt" style="text-align: center;">Last Week AQI</h6>
+											<div class="" style="text-align: center;">
+												<div id="aqi_area_comparison_chart_last_week_{{$index}}" class="gauge_graph_class"></div>
+												<h6 class="prami_txt">AQI</h6>
+												<h6 class="prami_txt">Prominent Pollutant : {{area.data.maxAqiLastWeek.name}}</h6>
+											</div>
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
