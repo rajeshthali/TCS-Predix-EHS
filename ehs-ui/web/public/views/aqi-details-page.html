@@ -2,7 +2,14 @@
 	<div class="col-md-12">
 		<div class="row">
 			<div class="col-md-12" style="padding-left: 5px; padding-right: 5px;">
+
 				<div class="col-md-12  aqi-details-tab-base">
+
+					<div class="col-md-12 floor_list_base">
+						<ul>
+							<li ng-repeat="f in floors" ng-class="{'active':$index===floor,'disabled':(aqiAreaLoading || aqiMachineLoading)}" ng-click="changeFloor(f.id)">{{f.name}}</li>
+						</ul>
+					</div>
 					<ul class="nav nav-tabs">
 						<li class="active"><a data-toggle="tab" href="" data-target="#aqi-area" ng-click="aqiTabChange('aqi')">Indoor Air Quality</a></li>
 					</ul>

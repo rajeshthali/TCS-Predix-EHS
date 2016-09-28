@@ -1306,14 +1306,6 @@ px-app-nav.navbar--collapsed .login {
 	margin-top: 3px;
 }
 
-
-
-
-
-
-
-
-
 .aqi-details-tab-base>ul {
 	margin-left: 0px !important;
 	margin-bottom: 0px !important;
@@ -1333,7 +1325,7 @@ px-app-nav.navbar--collapsed .login {
 	border: 1px solid #3694F8;
 	padding: 10px;
 	background-color: #fff;
-	min-height: 300px;
+	min-height: 325px;
 }
 
 .aqi-details-tab-base>.nav-tabs>.active>a {
@@ -1368,8 +1360,6 @@ px-app-nav.navbar--collapsed .login {
 	font-size: 12px;
 }
 
-
-
 .aqi-details-tab-base-content-inner {
 	border: 1px solid #8BBE3D;
 	padding: 10px;
@@ -1394,11 +1384,6 @@ px-app-nav.navbar--collapsed .login {
 	margin-bottom: -1px;
 	margin-top: 3px;
 }
-
-
-
-
-
 
 .aqi-comparison-tab-base-content>ul {
 	margin-left: 0px !important;
@@ -1440,7 +1425,6 @@ px-app-nav.navbar--collapsed .login {
 	margin-bottom: -1px;
 	margin-top: 3px;
 }
-
 
 .dash_op li {
 	cursor: pointer;
@@ -1516,6 +1500,7 @@ px-app-nav.navbar--collapsed .login {
 	margin-top: 20px;
 	margin-right: 20px;
 }
+
 .gauge_graph_class {
 	height: 150px;
 }
@@ -1598,6 +1583,49 @@ px-app-nav.navbar--collapsed .login {
 	top: 9px;
 	right: 10px;
 	color: #fff;
+}
+
+.floor_list_base {
+	position: relative;
+}
+
+.floor_list_base ul {
+	list-style: none;
+	position: absolute;
+	right: 0px;
+	top: 0px;
+}
+
+.floor_list_base ul li {
+	float: left;
+	line-height: 30px;
+	height: 30px;
+	cursor: pointer;
+	margin-left: 10px;
+	padding-left: 10px;
+	padding-right: 10px;
+	color: #3b3b3f;
+	background: #fff;
+}
+
+.floor_list_base ul li.active {
+	background: #8BBE3D;
+	color: #fff;
+	font-weight: bold;
+}
+
+.floor_list_base ul li.disabled {
+	background: gray;
+	color: #fff;
+	cursor: default;
+}
+
+.machine_values {
+	padding: 2px;
+}
+
+.machine_values>.col-md-12 {
+	margin: 0px;
 }
 
 /* end */

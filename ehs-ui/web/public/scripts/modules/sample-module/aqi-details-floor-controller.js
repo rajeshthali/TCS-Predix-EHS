@@ -3,37 +3,63 @@ define([ 'angular', './sample-module' ], function(angular, controllers) {
 	controllers.controller('AQIDetailsPageController', [ '$state', '$timeout', '$interval', '$scope', '$rootScope', '$http', '$log', 'PredixAssetService', 'PredixViewService', 'AuthService', 'HygieneService', 'DashBoardService', '$stateParams',
 			function($state, $timeout, $interval, $scope, $rootScope, $http, $log, PredixAssetService, PredixViewService, AuthService, HygieneService, DashBoardService, $stateParams) {
 				// console.log($stateParams);
-				$scope.maxValue = 50;
-				$scope.aqiAreaLoading = true;
-				$scope.aqiMachineLoading = true;
-				$scope.aqiAreaData = null;
-				$scope.aqiMachineData = null;
-				$scope.tabIndexArea = 0;
-				$scope.tabIndexMachine = 0;
-				$scope.tabIndexMachineComparison = 0;
+
 				var areaCharts = [];
 				var machineCharts = [];
+
+				var initVariables = function() {
+					areaCharts = [];
+					machineCharts = [];
+					$scope.maxValue = 50;
+					$scope.aqiAreaLoading = true;
+					$scope.aqiMachineLoading = true;
+					$scope.aqiAreaData = null;
+					$scope.aqiMachineData = null;
+					$scope.tabIndexArea = 0;
+					$scope.tabIndexMachine = 0;
+					$scope.tabIndexMachineComparison = 0;
+				};
+				initVariables();
+
+				$scope.floors = [ {
+					name : 'F1',
+					id : 0
+				}, {
+					name : 'F2',
+					id : 1
+				}, {
+					name : 'F3',
+					id : 2
+				} ];
+
+				$scope.floor = 0;
+				$scope.changeFloor = function(floor) {
+					$scope.floor = floor;
+					$scope.stop();
+					initVariables();
+					loadData();
+				};
 
 				var interval = 2 * 60 * 1000;
 				var refreshInterval = 20 * 1000;
 				var intervalPromiseMachine = null;
 				var intervalPromiseArea = null;
 
-				if (!$rootScope.floor) {
-					$rootScope.floor = 0;
+				if (!$scope.floor) {
+					$scope.floor = 0;
 				}
 				var startDynamicUpdateMachine = function() {
 					intervalPromiseMachine = $interval(function() {
 						// console.log('fetching machine details');
-						loadAqiMachine($rootScope.floor);
-					}, 12000);
+						loadAqiMachine($scope.floor);
+					}, 20000);
 				};
 
 				var startDynamicUpdateArea = function() {
 					intervalPromiseArea = $interval(function() {
 						// console.log('fetching area details');
-						loadAqiArea($rootScope.floor);
-					}, 12000);
+						loadAqiArea($scope.floor);
+					}, 20000);
 				};
 
 				$scope.$on('$destroy', function() {
@@ -45,11 +71,11 @@ define([ 'angular', './sample-module' ], function(angular, controllers) {
 					$interval.cancel(intervalPromiseArea);
 				};
 
-				// console.log($rootScope.floor);
+				// console.log($scope.floor);
 				var loadData = function() {
 					AuthService.getTocken(function(token) {
-						loadAqiMachine($rootScope.floor);
-						loadAqiArea($rootScope.floor);
+						loadAqiMachine($scope.floor);
+						loadAqiArea($scope.floor);
 					});
 				};
 				loadData();
@@ -79,9 +105,39 @@ define([ 'angular', './sample-module' ], function(angular, controllers) {
 								for (var i = 0; i < areaCharts[$scope.tabIndexArea].series.length; i++) {
 									var timestamps = DashBoardService.prettyMs([ x ])[0];
 									if (i < areaCharts[$scope.tabIndexArea].series.length - 1) {
-										areaCharts[$scope.tabIndexArea].series[i].addPoint([ timestamps, series[i].data[last] ], false, true);
+
+										var l = areaCharts[$scope.tabIndexArea].series[0].data.length;
+										if (l > 0) {
+											var lastTimeStamp = areaCharts[$scope.tabIndexArea].series[i].data[l - 1]['name'];
+											if (!lastTimeStamp) {
+												lastTimeStamp = areaCharts[$scope.tabIndexArea].series[i].data[l - 1]['category'];
+											}
+											// console.log(lastTimeStamp);
+											// console.log(timestamps);
+											if (lastTimeStamp !== timestamps) {
+												areaCharts[$scope.tabIndexArea].series[i].addPoint([ timestamps, series[i].data[last] ], false, true);
+											} else {
+												console.log('Same time stamp : ' + lastTimeStamp + '  ' + timestamps);
+											}
+										}
+
 									} else {
-										areaCharts[$scope.tabIndexArea].series[i].addPoint([ timestamps, series[i].data[last] ], true, true);
+
+										var l = areaCharts[$scope.tabIndexArea].series[0].data.length;
+										if (l > 0) {
+											var lastTimeStamp = areaCharts[$scope.tabIndexArea].series[i].data[l - 1]['name'];
+											if (!lastTimeStamp) {
+												lastTimeStamp = areaCharts[$scope.tabIndexArea].series[i].data[l - 1]['category'];
+											}
+											// console.log(lastTimeStamp);
+											// console.log(timestamps);
+											if (lastTimeStamp !== timestamps) {
+												areaCharts[$scope.tabIndexArea].series[i].addPoint([ timestamps, series[i].data[last] ], true, true);
+											} else {
+												console.log('Same time stamp : ' + lastTimeStamp + '  ' + timestamps);
+											}
+										}
+
 									}
 								}
 
@@ -114,9 +170,38 @@ define([ 'angular', './sample-module' ], function(angular, controllers) {
 								for (var i = 0; i < machineCharts[$scope.tabIndexMachine].series.length; i++) {
 									var timestamps = DashBoardService.prettyMs([ x ])[0];
 									if (i < machineCharts[$scope.tabIndexMachine].series.length - 1) {
-										machineCharts[$scope.tabIndexMachine].series[i].addPoint([ timestamps, series[i].data[last] ], false, true);
+
+										var l = areaCharts[$scope.tabIndexMachine].series[0].data.length;
+										if (l > 0) {
+											var lastTimeStamp = areaCharts[$scope.tabIndexMachine].series[i].data[l - 1]['name'];
+											if (!lastTimeStamp) {
+												lastTimeStamp = areaCharts[$scope.tabIndexMachine].series[i].data[l - 1]['category'];
+											}
+											// console.log(lastTimeStamp);
+											// console.log(timestamps);
+											if (lastTimeStamp !== timestamps) {
+												machineCharts[$scope.tabIndexMachine].series[i].addPoint([ timestamps, series[i].data[last] ], false, true);
+											} else {
+												console.log('Same time stamp : ' + lastTimeStamp + '  ' + timestamps);
+											}
+										}
+
 									} else {
-										machineCharts[$scope.tabIndexMachine].series[i].addPoint([ timestamps, series[i].data[last] ], true, true);
+										var l = areaCharts[$scope.tabIndexMachine].series[0].data.length;
+										if (l > 0) {
+											var lastTimeStamp = areaCharts[$scope.tabIndexMachine].series[i].data[l - 1]['name'];
+											if (!lastTimeStamp) {
+												lastTimeStamp = areaCharts[$scope.tabIndexMachine].series[i].data[l - 1]['category'];
+											}
+											// console.log(lastTimeStamp);
+											// console.log(timestamps);
+											if (lastTimeStamp !== timestamps) {
+												machineCharts[$scope.tabIndexMachine].series[i].addPoint([ timestamps, series[i].data[last] ], true, true);
+											} else {
+												console.log('Same time stamp : ' + lastTimeStamp + '  ' + timestamps);
+											}
+										}
+
 									}
 								}
 

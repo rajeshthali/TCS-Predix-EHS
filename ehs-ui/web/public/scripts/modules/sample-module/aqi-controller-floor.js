@@ -2,43 +2,62 @@ define([ 'angular', './sample-module', ], function(angular, controllers) {
 	'use strict';
 	controllers.controller('AqiController', [ '$scope', '$http', '$state', '$log', 'PredixAssetService', 'PredixViewService', 'CalculationOneService', 'CalculationService', '$interval', 'AqiService', '$rootScope', 'AuthService', 'HygieneService', 'DashBoardService',
 			function($scope, $http, $state, $log, PredixAssetService, PredixViewService, CalculationOneService, CalculationService, $interval, AqiService, $rootScope, AuthService, HygieneService, DashBoardService) {
-				$scope.maxValue = 50;
-				$scope.aqiAreaLoading = true;
-				$scope.aqiAreaComparisonLoading = true;
-				$scope.aqiMachineLoading = true;
-				$scope.aqiAreaData = null;
-				$scope.aqiAreaComparison = null;
-				$scope.aqiMachineData = null;
-				$scope.tabIndexArea = 0;
-				$scope.tabIndexMachine = 0;
-				$scope.tabIndexAreaComparison = 0;
-				$scope.tabIndexMachineComparison = 0;
-				$scope.aqiAreaComparisonLastWeek = null;
 				var areaCharts = [];
 				var areaGaugeCharts = [];
+				var initVariables = function() {
+					$scope.maxValue = 50;
+					$scope.aqiAreaLoading = true;
+					$scope.aqiAreaComparisonLoading = true;
+					$scope.aqiMachineLoading = true;
+					$scope.aqiAreaData = null;
+					$scope.aqiAreaComparison = null;
+					$scope.aqiMachineData = null;
+					$scope.tabIndexArea = 0;
+					$scope.tabIndexMachine = 0;
+					$scope.tabIndexAreaComparison = 0;
+					$scope.tabIndexMachineComparison = 0;
+					$scope.aqiAreaComparisonLastWeek = null;
+					areaCharts = [];
+					areaGaugeCharts = [];
+				};
+				initVariables();
+				$scope.floors = [ {
+					name : 'F1',
+					id : 0
+				}, {
+					name : 'F2',
+					id : 1
+				}, {
+					name : 'F3',
+					id : 2
+				} ];
 
 				var interval = 50 * 1000;
 				var refreshInterval = 20 * 1000;
 				var intervalPromiseMachine = null;
 				var intervalPromiseArea = null;
 
-				if (!$rootScope.floor) {
-					$rootScope.floor = 0;
-				}
+				$scope.floor = 0;
+				$scope.changeFloor = function(floor) {
+					$scope.floor = floor;
+					$scope.stop();
+					initVariables();
+					loadData();
+				};
 				var dynamicUpdateMachineStarted = false;
 				var dynamicUpdateAreaStarted = false;
 				var startDynamicUpdateMachine = function() {
 					intervalPromiseMachine = $interval(function() {
-						loadAqiMachine($rootScope.floor);
-					}, 12000);
+						loadAqiMachine($scope.floor);
+					}, 20000);
 				};
 
 				var startDynamicUpdateArea = function() {
 					// console.log('intervalPromiseArea>>');
 					intervalPromiseArea = $interval(function() {
 						// console.log('intervalPromiseArea');
-						loadAqiArea($rootScope.floor);
-					}, 12000);
+						loadAqiArea($scope.floor);
+					}, 20000);
 				};
 
 				$scope.aqiTabChange = function(key) {
@@ -65,11 +84,11 @@ define([ 'angular', './sample-module', ], function(angular, controllers) {
 					$interval.cancel(intervalPromiseArea);
 				};
 
-				// console.log($rootScope.floor);
+				// console.log($scope.floor);
 				var loadData = function() {
 					AuthService.getTocken(function(token) {
-						loadAqiMachine($rootScope.floor);
-						loadAqiArea($rootScope.floor);
+						loadAqiMachine($scope.floor);
+						loadAqiArea($scope.floor);
 					});
 				};
 				loadData();
@@ -126,13 +145,15 @@ define([ 'angular', './sample-module', ], function(angular, controllers) {
 								$scope.aqiAreaData = res[0].assets;
 								$scope.aqiAreaComparison = res[0].assets;
 								loadGaugeChart('#aqi_area_comparison_chart_' + $scope.tabIndexAreaComparison, $scope.aqiAreaComparison[$scope.tabIndexAreaComparison].data.maxAqi.aqiValue);
-								//console.log('getAqiAreaValues > ' + $scope.aqiAreaComparisonLastWeek)
-								//console.log('$scope.aqiAreaComparison > ' + $scope.aqiAreaComparison);
+								// console.log('getAqiAreaValues > ' +
+								// $scope.aqiAreaComparisonLastWeek)
+								// console.log('$scope.aqiAreaComparison > ' +
+								// $scope.aqiAreaComparison);
 								if ($scope.aqiAreaComparisonLastWeek) {
 									loadGaugeChart('#aqi_area_comparison_chart_last_week_' + $scope.tabIndexAreaComparison, $scope.aqiAreaComparisonLastWeek[$scope.tabIndexAreaComparison].data.maxAqi.aqiValue);
 									$scope.aqiAreaComparison[$scope.tabIndexAreaComparison].data.maxAqiLastWeek = $scope.aqiAreaComparisonLastWeek[$scope.tabIndexAreaComparison].data.maxAqi;
-									//console.log('getAqiAreaValues');
-									//console.log($scope.aqiAreaComparisonLastWeek);
+									// console.log('getAqiAreaValues');
+									// console.log($scope.aqiAreaComparisonLastWeek);
 								}
 
 								$("#aqi-area-tab-content").fadeIn();
@@ -148,14 +169,17 @@ define([ 'angular', './sample-module', ], function(angular, controllers) {
 							DashBoardService.getAqiAreaLastWeek(floor, interval, function(res) {
 
 								if (res.length > 0) {
-									//console.log('getAqiAreaLastWeek > ' + $scope.aqiAreaComparison);
+									// console.log('getAqiAreaLastWeek > ' +
+									// $scope.aqiAreaComparison);
 									if ($scope.aqiAreaComparison) {
 										$scope.aqiAreaComparisonLastWeek = res[0].assets;
-										//console.log('$scope.aqiAreaComparisonLastWeek > ' + $scope.aqiAreaComparisonLastWeek);
+										// console.log('$scope.aqiAreaComparisonLastWeek
+										// > ' +
+										// $scope.aqiAreaComparisonLastWeek);
 										loadGaugeChart('#aqi_area_comparison_chart_last_week_' + $scope.tabIndexAreaComparison, $scope.aqiAreaComparisonLastWeek[$scope.tabIndexAreaComparison].data.maxAqi.aqiValue);
 										$scope.aqiAreaComparison[$scope.tabIndexAreaComparison].data.maxAqiLastWeek = $scope.aqiAreaComparisonLastWeek[$scope.tabIndexAreaComparison].data.maxAqi;
-										//console.log('getAqiAreaLastWeek');
-										//console.log($scope.aqiAreaComparisonLastWeek);
+										// console.log('getAqiAreaLastWeek');
+										// console.log($scope.aqiAreaComparisonLastWeek);
 									}
 								}
 							});
@@ -169,9 +193,22 @@ define([ 'angular', './sample-module', ], function(angular, controllers) {
 								var last = findLastValue(res[0].assets[$scope.tabIndexArea].data.timestamps);
 								var x = res[0].assets[$scope.tabIndexArea].data.timestamps[last];
 								var y = res[0].assets[$scope.tabIndexArea].data.value[last];
-
 								var timestamps = DashBoardService.prettyMs([ x ])[0];
-								areaCharts[$scope.tabIndexArea].series[0].addPoint([ timestamps, y ], true, true);
+								var l = areaCharts[$scope.tabIndexArea].series[0].data.length;
+								if (l > 0) {
+									var lastTimeStamp = areaCharts[$scope.tabIndexArea].series[0].data[l - 1]['name'];
+									if (!lastTimeStamp) {
+										lastTimeStamp = areaCharts[$scope.tabIndexArea].series[0].data[l - 1]['category'];
+									}
+									// console.log(lastTimeStamp);
+									// console.log(timestamps);
+									if (lastTimeStamp !== timestamps) {
+										areaCharts[$scope.tabIndexArea].series[0].addPoint([ timestamps, y ], true, true);
+									} else {
+										console.log('Same time stamp : ' + lastTimeStamp + '  ' + timestamps);
+									}
+								}
+
 							}
 						});
 					}
