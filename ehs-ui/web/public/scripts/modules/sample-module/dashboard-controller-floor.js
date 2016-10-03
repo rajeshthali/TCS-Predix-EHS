@@ -253,7 +253,7 @@ define([ 'angular', './sample-module' ], function(angular, controllers) {
 					document.querySelector('px-app-nav').markSelected('/airquality'); 
 					// console.log(floor + ' ' + type + ' ' + assetName);
 					if (type == 'machine' || type === 'area') {
-						$state.go('airquality', {
+						$state.go('aqi-details', {
 							'floor' : floor,
 							'type' : type,
 							'assetName' : assetName

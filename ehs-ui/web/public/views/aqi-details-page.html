@@ -7,7 +7,7 @@
 
 					<div class="col-md-12 floor_list_base">
 						<ul>
-							<li ng-repeat="f in floors" ng-class="{'active':$index===floor,'disabled':(aqiAreaLoading || aqiMachineLoading)}" ng-click="changeFloor(f.id)">{{f.name}}</li>
+							<li ng-repeat="f in floors" ng-class="{'active':$index==floor,'disabled':(aqiAreaLoading || aqiMachineLoading)}" ng-click="changeFloor(f.id)">{{f.name}}</li>
 						</ul>
 					</div>
 					<ul class="nav nav-tabs">

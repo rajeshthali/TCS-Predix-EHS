@@ -31,9 +31,22 @@ define([ 'angular', './sample-module' ], function(angular, controllers) {
 					name : 'F3',
 					id : 2
 				} ];
-
-				$scope.floor = 0;
-				$scope.changeFloor = function(floor) {
+               //  $scope.floor = 0;
+				
+			   //Rohit
+				$scope.floor =  $stateParams.floor;
+                if($stateParams.floor == null){
+				   $scope.floor = 0;
+				// console.log("undefined floor")
+				}
+				else{
+				 $scope.floor =  $stateParams.floor;
+			    //console.log("changed floor in load data" +$scope.floor)
+				}
+                
+                
+                $scope.changeFloor = function(floor) {
+                	//console.log("function is called");
 					if (!$scope.aqiAreaLoading && !$scope.aqiMachineLoading) {
 						$scope.floor = floor;
 						$scope.stop();
@@ -46,11 +59,7 @@ define([ 'angular', './sample-module' ], function(angular, controllers) {
 				var refreshInterval = 20 * 1000;
 				var intervalPromiseMachine = null;
 				var intervalPromiseArea = null;
-
-				if (!$scope.floor) {
-					$scope.floor = 0;
-				}
-				var startDynamicUpdateMachine = function() {
+                var startDynamicUpdateMachine = function() {
 					intervalPromiseMachine = $interval(function() {
 						// console.log('fetching machine details');
 						loadAqiMachine($scope.floor);
@@ -87,6 +96,10 @@ define([ 'angular', './sample-module' ], function(angular, controllers) {
 						$scope.aqiAreaLoading = true;
 						DashBoardService.getAqiAreaValues(floor, interval, function(res) {
 							if (res.length > 0) {
+								
+								$scope.floorName = floor;
+								//console.log("update the floor" +$scope.floorName);
+								
 								$scope.aqiAreaData = res[0].assets;
 								$scope.aqiAreaComparison = res[0].assets;
 								$("#aqi-area-tab-content").fadeIn();
@@ -99,6 +112,9 @@ define([ 'angular', './sample-module' ], function(angular, controllers) {
 						DashBoardService.getAqiAreaValues(floor, interval, function(res) {
 							if (res.length > 0) {
 								// console.log(res[0]);
+								$scope.floorName = floor;
+								//console.log("else update the floor" +$scope.floorName);
+								
 								var last = findLastValue(res[0].assets[$scope.tabIndexArea].data.timestamps);
 								var x = res[0].assets[$scope.tabIndexArea].data.timestamps[last];
 								var y = res[0].assets[$scope.tabIndexArea].data.value[last];

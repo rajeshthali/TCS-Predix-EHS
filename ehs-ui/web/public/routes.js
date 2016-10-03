@@ -46,13 +46,34 @@ define([ 'angular', 'angular-ui-router' ], function(angular) {
 			controller : 'GraphCtrl'
 		}).state('airquality', {
 			url : '/airquality',
-			templateUrl : 'views/airquality.html',
-			controller : 'airqmainCtrl'
+			templateUrl : 'views/aqi-floor.html',
+			controller : 'AqiController',
+			params : {
+				'smtare' : null
+			}
+		  
+		 
 		}).state('detail_parameter', {
 			url : '/detail_parameter',
 			templateUrl : 'views/detail_parameter.html',
 			controller : 'detilparaCtrl'
-		}).state('detilpara', {
+		}).state('aqi-details', {
+			url : '/aqi-details',
+			templateUrl : 'views/aqi-details-page.html',
+			controller : 'AQIDetailsPageController',
+			params : {
+				'floor' : null,
+				'type' : null,
+				'assetName' : null
+			}
+		
+		}).state('hygiene-details', {
+			url : '/hygiene-details',
+			templateUrl : 'views/hygiene-details-page.html',
+			controller : 'HygieneDetailsPageController'
+		})
+
+		.state('detilpara', {
 			url : '/detilgraph',
 			templateUrl : 'views/detilgraph.html',
 			controller : 'detilgraphCtrl'

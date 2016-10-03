@@ -28,7 +28,7 @@
 							<div id="aqi-area-tab-content" class="tab-content aqi-tab-base-content-inner" style="display: none;">
 								<div ng-repeat="area in aqiAreaData" id="aqi_area_{{$index}}" ng-class="{'active':$index==tabIndexArea}" class="tab-pane fade in">
 
-									<div ui-sref="aqi-details" id="area_chart_{{$index}}" class="graph_class"></div>
+									<div  id="area_chart_{{$index}}" class="graph_class" ng-click= "details(floor)"></div>
 
 									<div class="col-md-12 area_gauge_chart_base">
 										<div class="row">

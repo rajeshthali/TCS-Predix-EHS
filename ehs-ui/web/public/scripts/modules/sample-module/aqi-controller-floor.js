@@ -624,6 +624,17 @@ define([ 'angular', './sample-module', ], function(angular, controllers) {
 					return status;
 
 				};
+				
+				
+				$scope.details = function(floor) {
+					$scope.floor = floor;
+					$state.go('aqi-details', {
+							'floor' : floor		
+					});
+					 
+			    };
+				
+				
 			} ]);
 
 });
