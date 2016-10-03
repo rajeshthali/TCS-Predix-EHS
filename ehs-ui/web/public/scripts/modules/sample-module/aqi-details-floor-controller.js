@@ -119,7 +119,7 @@ define([ 'angular', './sample-module' ], function(angular, controllers) {
 											if (lastTimeStamp !== timestamps) {
 												areaCharts[$scope.tabIndexArea].series[i].addPoint([ timestamps, series[i].data[last] ], false, true);
 											} else {
-												console.log('Same time stamp : ' + lastTimeStamp + '  ' + timestamps);
+												//console.log('Same time stamp : ' + lastTimeStamp + '  ' + timestamps);
 											}
 										}
 

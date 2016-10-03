@@ -250,9 +250,10 @@ define([ 'angular', './sample-module' ], function(angular, controllers) {
 					floor.append($compile(html)($scope));
 				};
 				$scope.gotoDetails = function(floor, type, assetName) {
+					document.querySelector('px-app-nav').markSelected('/airquality'); 
 					// console.log(floor + ' ' + type + ' ' + assetName);
 					if (type == 'machine' || type === 'area') {
-						$state.go('aqi-details', {
+						$state.go('airquality', {
 							'floor' : floor,
 							'type' : type,
 							'assetName' : assetName

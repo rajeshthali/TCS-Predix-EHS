@@ -16,7 +16,13 @@ background-color: #ffffff;
 			</ul>
 		</div>
 </div> -->
+<div class="col-md-12 floor_list_base">
+						<ul>
+							<li ng-repeat="f in floors"   ng-class="{'active':$index===floor,'disabled':(aqiMachineLoading || aqiMachineLoading)}" ng-click="changeFloor(f.id)">{{f.name}}</li>
+						</ul>
+					</div>
 <div >
+<img src='/images/25.gif' class="lad_img_hygn" ng-show="loading == true">
 	<div class="col-md-3 hygn_background">
 		<div class="hygn_rect_curve_1">
 			<div class="hygn_icons_1"></div>

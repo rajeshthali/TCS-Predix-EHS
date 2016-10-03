@@ -13,7 +13,8 @@ define([ 'angular', 'angular-ui-router' ], function(angular) {
 		 * Router paths This is where the name of the route is matched to the
 		 * controller and view template.
 		 */
-		$stateProvider.state('secure', {
+		$stateProvider
+		/*.state('secure', {
 			template : '<ui-view/>',
 			abstract : true,
 			resolve : {
@@ -30,8 +31,9 @@ define([ 'angular', 'angular-ui-router' ], function(angular) {
 					return deferred.promise;
 				} ]
 			}
-		}).state('dashboards', {
-			parent : 'secure',
+		})*/
+			.state('dashboards', {
+			//parent : 'secure',
 			url : '/dashboards',
 			templateUrl : 'views/dashboards-floor.html',
 			controller : 'DashboardsCtrlFloor',
@@ -83,11 +85,11 @@ define([ 'angular', 'angular-ui-router' ], function(angular) {
 			url : '/industrial-hygiene',
 			templateUrl : 'views/industrial-hygiene.html',
 			controller : 'industrialHygiene'
-		}).state('industrial-hygiene-details', {
+		})/*.state('industrial-hygiene-details', {
 			url : '/industrial-hygiene-details',
 			templateUrl : 'views/industrial-hygiene-details.html',
 			controller : 'industrialHygieneDetails'
-		})
+		})*/
 
 		.state('blanksubpage', {
 			url : '/blanksubpage',

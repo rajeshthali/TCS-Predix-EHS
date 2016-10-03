@@ -564,6 +564,13 @@ px-app-nav.navbar--collapsed .login {
 	top: 26%;
 	left: 58%;
 }
+.lad_img_hygn {
+	
+	z-index: 15000;
+	position: absolute;
+	top: 48%;
+    left: 47%;
+}
 
 .loaderpg_dash {
 	display: none;
@@ -1591,9 +1598,10 @@ px-app-nav.navbar--collapsed .login {
 
 .floor_list_base ul {
 	list-style: none;
-	position: absolute;
+	/* position: absolute;
 	right: 0px;
-	top: 0px;
+	top: 0px; */
+	    float: right;
 }
 
 .floor_list_base ul li {
